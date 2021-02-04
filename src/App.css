@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+.showtime-preview > div:first-child {
+  font-size: 12px;
+  white-space: normal;
+}
+
+.showtime-preview > div:not(:first-child) {
+  font-size: 11px;
+  white-space: normal;
+}
