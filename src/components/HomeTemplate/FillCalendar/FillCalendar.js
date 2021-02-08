@@ -3,9 +3,9 @@ import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
 
 import Scheduler, {Resource} from 'devextreme-react/scheduler';
-import SalesTemplate from './SalesTemplate.js'
+import FillTemplate from './FillTemplate.js'
 
-import { data, salesmanData} from '../salesData.js';
+import { data, loosefillData} from './fillData';
 
 const currentDate = new Date();
 let date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
@@ -26,10 +26,10 @@ class FillCalendar extends React.Component {
         defaultCurrentDate={date}
         height={800}
         startDayHour={6}
-        appointmentComponent={SalesTemplate}
+        appointmentComponent={FillTemplate}
         >
         <Resource
-          dataSource={salesmanData}
+          dataSource={loosefillData}
           fieldExpr="id"
           useColorAsDefault={true}
           >

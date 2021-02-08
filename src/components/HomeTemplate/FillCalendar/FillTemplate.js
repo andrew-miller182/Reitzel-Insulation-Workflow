@@ -1,6 +1,6 @@
 import React from 'react';
 import Query from 'devextreme/data/query';
-import {loosefillData} from '../fillData.js';
+import {loosefillData} from './fillData.js';
 
 function getFillById(id) {
   return Query(loosefillData).filter(['id', id]).toArray()[0];

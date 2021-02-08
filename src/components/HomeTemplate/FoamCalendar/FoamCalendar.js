@@ -5,7 +5,7 @@ import 'devextreme/dist/css/dx.light.css';
 import Scheduler, {Resource} from 'devextreme-react/scheduler';
 import FoamTemplate from './FoamTemplate.js'
 
-import { data, foamData} from '../foamData.js';
+import { data, foamData} from './foamData';
 
 const currentDate = new Date();
 let date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();

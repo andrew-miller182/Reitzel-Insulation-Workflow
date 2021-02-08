@@ -1,6 +1,6 @@
 import React from 'react';
 import Query from 'devextreme/data/query';
-import {foamData} from '../foamData.js';
+import {foamData} from './foamData.js';
 
 function getFoamById(id) {
   return Query(foamData).filter(['id', id]).toArray()[0];

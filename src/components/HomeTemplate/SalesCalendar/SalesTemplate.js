@@ -1,6 +1,6 @@
 import React from 'react';
 import Query from 'devextreme/data/query';
-import {salesmanData} from '../salesData.js';
+import {salesmanData} from './salesData.js';
 
 function getSalesById(id) {
   return Query(salesmanData).filter(['id', id]).toArray()[0];
