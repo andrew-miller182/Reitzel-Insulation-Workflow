@@ -3,6 +3,7 @@ import Tabs from "./Tabs";
 import SalesCalendar from './SalesCalendar/SalesCalendar';
 import FoamCalendar from './FoamCalendar/FoamCalendar';
 import FillCalendar from './FillCalendar/FillCalendar';
+import './Template.css';
 
 class Template extends React.Component {
     constructor(props) {
