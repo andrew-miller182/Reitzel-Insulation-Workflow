@@ -1,6 +1,7 @@
 import axios from "axios";
 import { message } from "antd";
 import { getUser } from "../util/storage";
+import { manuList } from "../config/leftnav";
 
 //set the interceptor for response: errorhandling
 axios.interceptors.response.use(null, (err) => {

@@ -31,7 +31,7 @@ export function addUser(user) {
 }
 //update user
 export function updateUser(id, loginId, loginPwd, email, role) {
-  //
+  //to do
 }
 //delete user
 export function deleteUser(id) {
