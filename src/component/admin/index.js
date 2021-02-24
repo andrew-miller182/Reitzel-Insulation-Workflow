@@ -9,23 +9,22 @@ import Head from "../head";
 import { getUser } from "../../util/storage";
 import jwt from "jsonwebtoken";
 import Searchbar from "../searchbar";
+import { datas } from "../../api/index";
 const { Header, Content, Footer, Sider } = Layout;
 
 export default class Homepage extends React.Component {
   render() {
-    var user = getUser();
-    user = jwt.decode(user);
-    console.log("user", user);
-    if (!user) return <Redirect to="/login" />;
-    const { role, username, imgUrl } = user;
     return (
       <Layout className="layout">
         <Sider>
-          <Leftnav role={role} imgUrl={imgUrl}></Leftnav>
+          <Leftnav
+            role={datas.user[0].role}
+            imgUrl={datas.user[0].imgUrl}
+          ></Leftnav>
         </Sider>
         <Layout className="main-layout">
           <Header className="header">
-            <Head username={username} />
+            <Head username={datas.user[0].loginId} />
           </Header>
 
           <Content className="content">

@@ -3,6 +3,7 @@ import "./index.css";
 import { Card, Table, Button, Modal, Form, Input, message } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { addUser, getUsers, updateUser, deleteUser } from "../../api/index";
+import { datas } from "../../api/index";
 const { Item } = Form;
 const { confirm } = Modal;
 export default function Users() {
@@ -16,8 +17,9 @@ export default function Users() {
   const [updateShow, setupdateShow] = useState(false);
   //control the status of the deleting form modal
   const [deleteShow, setdeleteShow] = useState(false);
-  //the data of users list
-  const [datas, setDatas] = useState([]);
+
+  const [, setForce] = useState();
+
   //the selected to be updated or deleted data
   const [selectedData, setselectedData] = useState({});
   const title = (
@@ -92,10 +94,10 @@ export default function Users() {
     const value = form.getFieldsValue();
     const { loginId, loginPwd, email, role } = value;
     const result = await addUser({ loginId, loginPwd, email, role });
-    if (result.data.status === 1) {
+    if (result === 1) {
       message.success("Success!");
-      setDatas([...datas, result.data.data]);
       setAddShow(false);
+      setForce();
     }
   };
   //handle updating form
@@ -130,17 +132,9 @@ export default function Users() {
       cancelText: "No",
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteUser(id)
-            .then((data) => {
-              if (data.data.status === 1) {
-                message.success("success!");
-                resolve();
-              }
-            })
-            .catch((err) => {
-              message.warn(err);
-              reject();
-            });
+          const result = deleteUser(id);
+          if (result === 1) message.success("success!");
+          resolve();
         });
       },
       onCancel() {
@@ -149,24 +143,6 @@ export default function Users() {
     });
   };
 
-  //handle ajax side effect
-  useEffect(() => {
-    getUsers()
-      .then((data) => {
-        const datas = data.data.data.map((item) => {
-          return {
-            key: item.id,
-            loginId: item.loginId,
-            email: item.email,
-            role: item.role,
-          };
-        });
-        setDatas(datas);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [datas]);
   return (
     <div className="settings-user">
       <Card title={title} bordered>
@@ -174,7 +150,7 @@ export default function Users() {
           style={{ width: "80%", margin: "0 auto" }}
           rowKey="key"
           bordered
-          dataSource={datas}
+          dataSource={datas.user}
           columns={columns}
           tableLayout="auto"
           pagination={{ pageSize: 3 }}

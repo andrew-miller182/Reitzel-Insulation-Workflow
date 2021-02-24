@@ -3,11 +3,10 @@ import "./index.css";
 import { Card, Table, Button, Modal, Form, Input, message, Tree } from "antd";
 import { addRole, getRoles } from "../../api/index";
 import { manuList } from "../../config/leftnav";
+import { datas } from "../../api/index";
 const { Item } = Form;
 
 export default function Roles() {
-  //handling datas of role
-  const [datas, setDatas] = useState([]);
   //control the adding form status
   const [addingShow, setaddingShow] = useState(false);
   //control the modify tree component status
@@ -118,18 +117,6 @@ export default function Roles() {
     </>
   );
 
-  //handle ajax request side effect
-  useEffect(() => {
-    getRoles()
-      .then((data) => {
-        setDatas(data.data.data);
-      })
-      .catch((err) => {
-        message.warn(err);
-      });
-    console.log("navlist", manuList);
-  }, []);
-
   return (
     <Card title={title} bordered>
       <Table
@@ -143,7 +130,7 @@ export default function Roles() {
           },
         }}
         onRow={handleonRow}
-        dataSource={datas}
+        dataSource={datas.role}
       ></Table>
       <Modal
         visible={addingShow}

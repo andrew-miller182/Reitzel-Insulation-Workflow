@@ -13,12 +13,7 @@ export default function Login(props) {
     const { loginId, loginPwd } = values;
     const result = await getLogin(loginId, loginPwd);
     reqWeather("calgary");
-    if (result.data.status === 1) {
-      //add user information into catch
-      Catch.user = result.data.data;
-      //add user information into localstorage
-      setUser(result.data.data);
-
+    if (result === 1) {
       props.history.replace("/");
       message.success("Login Success!");
     } else {
