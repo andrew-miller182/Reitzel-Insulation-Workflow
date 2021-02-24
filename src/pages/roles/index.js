@@ -164,7 +164,7 @@ export default function Roles() {
             <Input disabled value={row.rolename} />
           </Item>
         </Form>
-        <Tree checkable treeData={treeDatas} autoExpandParent={true}></Tree>
+        <Tree checkable treeData={treeDatas} defaultExpandAll={true}></Tree>
       </Modal>
     </Card>
   );

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
-import { Card, Table, Button, Modal, Form, Input, message } from "antd";
+import { Card, Table, Button, Modal, Form, Input, message, Select } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { addUser, getUsers, updateUser, deleteUser } from "../../api/index";
 import { datas } from "../../api/index";
 const { Item } = Form;
 const { confirm } = Modal;
+const { Option } = Select;
 export default function Users() {
   //form ref to control the adding form
   const [form] = Form.useForm();
@@ -18,6 +19,7 @@ export default function Users() {
   //control the status of the deleting form modal
   const [deleteShow, setdeleteShow] = useState(false);
 
+  const [onSelected, setonSelected] = useState();
   const [, setForce] = useState();
 
   //the selected to be updated or deleted data
@@ -33,6 +35,10 @@ export default function Users() {
       New User
     </Button>
   );
+
+  const options = datas.role.map((item) => (
+    <Option key={item.id}>{item.rolename}</Option>
+  ));
 
   //for table coloums
   const columns = [
@@ -231,7 +237,7 @@ export default function Users() {
                 },
               ]}
             >
-              <Input />
+              <Select>{options}</Select>
             </Item>
           </Form>
         </Modal>
@@ -311,7 +317,7 @@ export default function Users() {
                 },
               ]}
             >
-              <Input />
+              <Select>{options}</Select>
             </Item>
           </Form>
         </Modal>
