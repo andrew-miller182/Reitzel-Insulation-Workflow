@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-function TextInput(props) {
+function Input(props) {
   const [inputType] = useState(props.type)
   const [inputValue, setInputValue] = useState('')
 
@@ -10,8 +10,8 @@ function TextInput(props) {
   }
   return (
     <>
-      <input type={inputType} onFocusout={props.onFocusout} value={inputValue} name={props.name} placeholder={props.placeholder} onChange={handleChange} className="inputclass"/>
+      <input type={inputType} value={inputValue} name={props.name} placeholder={props.placeholder} onChange={props.handleChange} class="inputclass"/>
     </>
   );
 }
-export default TextInput;
+export default Input;

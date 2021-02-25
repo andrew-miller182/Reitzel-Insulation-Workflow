@@ -4,7 +4,7 @@ function Button(props) {
   const [size] = useState(props.size);
   const [variant] = useState(props.variant);
   return (
-    <button className={`btn-${variant} btn-${size}`}>{props.children}</button>
+    <button className={`btn-${variant} btn-${size}`} onClick={props.onClick}>{props.children}</button>
   );
 }
 export default Button;

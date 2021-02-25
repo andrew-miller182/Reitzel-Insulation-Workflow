@@ -25,7 +25,7 @@ function FormOne() {
         },
         {
           id: "5",
-          name: "Foam Template"
+          name: "Form Template"
         },
         {
           id: "6",

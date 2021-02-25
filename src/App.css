@@ -1,16 +1,24 @@
+*{
+   font-family: "Helvetica"; 
+   font-weight: bolder; 
+   font-size: 20px;
+}
+/*class name quote*/
+
 .App {
   font-family: sans-serif;
-  text-align: center;
+  
   margin-top: 200px;
   padding-bottom: 20px;
 }
+
 .inputclass {
-  padding: 5px;
+  padding: 15px;
   margin: 10px;
 }
 .custom-search-select {
-  padding: 5px;
-  margin: 10px;
+  padding: 25px;
+  margin-left: 10px;
 }
 .toggle {
   margin: 10px;
@@ -23,16 +31,37 @@ button {
   font-family: Arial, Helvetica, sans-serif;
   margin: 0 5px;
 }
+.Quote{
+  color:  #eeeef1;
+  background-color:  #00004d;
+  margin-left: 1%;
+  padding-left: 2%;
+  padding-top: 2%;
+  width: 896px;
+  padding-bottom: 10%
+}
 
 form {
-  border: 1px solid red;
-  width: 500px;
+
+  width: 900px;
   padding: 20px;
+  margin-left: 1%;
+  background-color:  #00004d;
+  color: #ffffff;
+  align-content: center;
+  justify-content: center;
+ 
+}
+.Form>h2{
+  font-size: 75px;
+  color: #3b8ef6;
+  margin-left: 1%;
 }
 
 .btn-default {
   background-color: #f4b400;
   color: #fff;
+
 }
 
 .btn-danger {
@@ -127,7 +156,7 @@ form {
 .toggle-switch-disabled:before {
   background-color: #ccc;
   cursor: not-allowed;
-}
+} 
 .toggle-switch-inner:after {
   content: attr(data-no);
   text-transform: uppercase;
