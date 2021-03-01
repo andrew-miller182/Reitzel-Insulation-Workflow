@@ -2,54 +2,78 @@
     {
       id : 1,
       name: "Josh",
-      color:'#7b49d3'
+      text:"Josh"
     },
     {
       id : 2,
       name: "Leslie",
-      color:'#0d6613'
+      text:"Leslie"
     },
     {
       id : 3,
       name: "Hank",
-      color:'#ff0000'
+      text:"Hank"
     }
-  ]
+  ];
+  export const regionColor = [
+    {
+      region:"Elmira & area",
+      color:"#c48d72"
+    },
+    {
+      region:"Guelph & area",
+      color:"#c48d72"
+    },
+    {
+      region:"Cambridge & area",
+      color:"#c48d72"
+    },
+    {
+      region:"Hamilton & area",
+      color:"#c48d72"
+    },
+    {
+      region:"Stratford & area",
+      color:"#913800"
+    },
+    {
+      region:"Listowel area",
+      color:"#4f2b19"
+    },
+    {
+      region:"Greater Toronto area",
+      color:"#00065e"
+    },
+    {
+      region:"Kitchener - Waterloo",
+      color:"#ff852e"
+    },
+    {
+      region:"Brantford, Paris, Burford, Waterford, Brant Country, Haldmald, Caledonia",
+      color:"#6b0000"
+    },
+
+  ];
 
   export const data = [
       {
-        text: 'Estimate at Ontario',
-        id:1,
-        address: '123 High St Ontario',
+        estimateId:"2",
+        firstName:"Mark",
+        lastName:"Ringo",
+        billingAddress:"545 Lakeview Drive",
+        city:"Hamilton",
+        postalCode:"",
+        phoneNumber:"",
+        email:"",
+        region:"Hamilton & area",
+        siteAddress:"",
+        siteCity:"",
+        sitePostalCode:"",
+        typeOfJob:"Foam",
+        text:"Check out old foam and replace",
+        salesman:"1",
         startDate: new Date('2021-02-02T16:30:00.000Z'),
         endDate: new Date('2021-02-02T18:30:00.000Z')
-      }, 
-      {
-        text: 'Estimate at Waterloo',
-        id:2,
-        address: '123 High St Ontario',
-        startDate: new Date('2021-02-02T19:30:00.000Z'),
-        endDate: new Date('2021-02-02T20:30:00.000Z')
-      }, 
-      {
-        text: 'Estimate for wind damage',
-        id:1,
-        address: '123 High St Ontario',
-        startDate: new Date('2021-02-03T12:30:00.000Z'),
-        endDate: new Date('2021-02-03T14:30:00.000Z')
-      }, 
-      {
-        text: 'Estimate for garage',
-        id:3,
-        address: '123 High St Ontario',
-        startDate: new Date('2021-02-03T16:30:00.000Z'),
-        endDate: new Date('2021-02-03T18:30:00.000Z')
-      }, 
-      {
-        text: 'estimate waterloo',
-        id:1,
-        address:'45 Waterloo Place',
-        startDate:new Date('2021-02-03T20:00:00.000Z'),
-        endDate:new Date('2021-02-03T21:30:00.000Z')
       }
+      
     ];

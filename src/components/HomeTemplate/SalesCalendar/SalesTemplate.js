@@ -7,18 +7,17 @@ function getSalesById(id) {
 }
 
 
-
-export default function SalesTemplate(model) {
+export default function SalesTooltip(model) {
   const { appointmentData } = model.data;
-  const salesIDData = getSalesById(appointmentData.id) || {};
+  const salesIDData = getSalesById(appointmentData.salesman) || {};
   return (
     <div>
       <div>Job info: {appointmentData.text}</div>
       <div>
-        Salesman: <strong>{ salesIDData.name }</strong>
+        Salesman: <strong>{ salesIDData.salesman }</strong>
       </div>
       <div>
-        Address: {appointmentData.address}
+        Address: {appointmentData.billingAddress}
       </div>
     </div>
   );
