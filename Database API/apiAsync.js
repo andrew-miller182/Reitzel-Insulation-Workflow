@@ -34,7 +34,7 @@ let deleteValues = async (tableName, condition) => {
   return JSON.parse(JSON.stringify(rows))
 }
 
-let fetchValues = async (tableName, columns = '*', condition = '') => {
+let fetchValues = async (tableName, columns, condition) => {
   var conn = await getConnection()
   let sql = 'SELECT ' + columns + ' FROM ' + tableName + ' WHERE ' + condition
   var [rows] = await conn.query(sql)

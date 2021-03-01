@@ -8,28 +8,35 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.get('/fetchValues', async (req, res) => {
-  let { tableName, columns, condition } = req.body
-  // let tableName = req.body.tableName
-  // let columns = req.body.columns || '*'
-  // let condition = req.body.condition || 'true'
+  //let { tableName, columns, condition } = req.body
+  let tableName = req.body.tableName
+  let columns = req.body.columns || '*'
+  let condition = req.body.condition || 'true'
   let output = await myApi.fetchValues(tableName, columns, condition)
   res.send(output)
 })
 
 app.post('/insertValues', async (req, res) => {
-  let { tableName, values } = req.body
+  // let { tableName, values } = req.body
+  let tableName = req.body.tableName
+  let values = req.body.values
   let output = await myApi.insertValues(tableName, values)
   res.send(output)
 })
 
 app.post('/updateValues', async (req, res) => {
-  let { tableName, columnsAndValues, condition } = req.body
+  // let { tableName, columnsAndValues, condition } = req.body
+  let tableName = req.body.tableName
+  let columnsAndValues = req.body.columnsAndValues
+  let condition = req.body.condition || 'true'
   let output = await myApi.updateValues(tableName, columnsAndValues, condition)
   res.send(output)
 })
 
 app.post('/deleteValues', async (req, res) => {
-  let { tableName, condition } = req.body
+  // let { tableName, condition } = req.body
+  let tableName = req.body.tableName
+  let condition = req.body.condition || 'true'
   let output = await myApi.deleteValues(tableName, condition)
   res.send(output)
 })
