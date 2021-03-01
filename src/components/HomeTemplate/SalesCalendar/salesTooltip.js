@@ -3,10 +3,10 @@ import Query from 'devextreme/data/query';
 import {salesmanData} from './salesData.js';
 
 function getSalesById(id) {
-  return Query(salesmanData).filter(['id', id]).toArray()[0];
+  return Query(salesmanData).filter(['name', id]).toArray()[0];
 }
 
-export default class SalesTemplate extends React.Component {
+export default class SalesTooltip extends React.Component {
     constructor(props){
       super(props);
       this.state= {

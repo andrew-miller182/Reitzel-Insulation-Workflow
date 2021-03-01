@@ -18,15 +18,15 @@
   export const regionColor = [
     {
       region:"Elmira & area",
-      color:"#c48d72"
+      color:""
     },
     {
       region:"Guelph & area",
-      color:"#c48d72"
+      color:""
     },
     {
       region:"Cambridge & area",
-      color:"#c48d72"
+      color:""
     },
     {
       region:"Hamilton & area",
