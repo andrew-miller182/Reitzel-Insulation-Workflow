@@ -3,7 +3,7 @@ import Query from 'devextreme/data/query';
 import {salesmanData} from './salesData.js';
 
 function getSalesById(id) {
-  return Query(salesmanData).filter(['name', id]).toArray()[0];
+  return Query(salesmanData).filter(['id', id]).toArray()[0];
 }
 
 
@@ -14,7 +14,7 @@ export default function SalesTemplate(model) {
     <div>
       <div>Job info: {appointmentData.text}</div>
       <div>
-        Salesman: <strong>{ salesIDData.salesman }</strong>
+        Salesman: <strong>{ salesIDData.name }</strong>
       </div>
       <div>
         Address: {appointmentData.billingAddress}

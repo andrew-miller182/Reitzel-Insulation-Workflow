@@ -57,7 +57,7 @@
 
   export const data = [
       {
-        estimateId:"2",
+        id:'50',
         firstName:"Mark",
         lastName:"Ringo",
         billingAddress:"545 Lakeview Drive",
@@ -72,7 +72,7 @@
         typeOfJob:"Foam",
         text:"Check out old foam and replace",
         salesman:"1",
-        startDate: new Date('2021-02-02T16:30:00.000Z'),
+        startDate: new Date('2021-02-02T12:30:00.000Z'),
         endDate: new Date('2021-02-02T18:30:00.000Z')
       }
       

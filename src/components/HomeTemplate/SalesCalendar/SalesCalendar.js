@@ -49,7 +49,7 @@ class SalesCalendar extends React.Component {
         defaultCurrentDate={date}
         height={800}
         startDayHour={6}
-        appointmentComponent={SalesTemplate}
+        //appointmentComponent={SalesTemplate}
         appointmentTooltipComponent={SalesTooltip}
         onAppointmentDeleting={onAppointmentDeleting}
         onAppointmentFormOpening={this.onAppointmentForm}
