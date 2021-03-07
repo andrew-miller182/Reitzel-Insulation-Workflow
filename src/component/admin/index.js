@@ -14,17 +14,26 @@ const { Header, Content, Footer, Sider } = Layout;
 
 export default class Homepage extends React.Component {
   render() {
+    var SecurityLevel = "";
+    var FirstName = "";
+    try {
+      if (getUser() !== "undefined") {
+        console.log("aaaaa", getUser());
+        SecurityLevel = getUser().SecurityLevel;
+        FirstName = getUser().FirstName;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
     return (
       <Layout className="layout">
         <Sider>
-          <Leftnav
-            role={datas.user[0].role}
-            imgUrl={datas.user[0].imgUrl}
-          ></Leftnav>
+          <Leftnav role={SecurityLevel} imgUrl={datas.user[0].imgUrl}></Leftnav>
         </Sider>
         <Layout className="main-layout">
           <Header className="header">
-            <Head username={datas.user[0].loginId} />
+            <Head username={FirstName} />
           </Header>
 
           <Content className="content">

@@ -12,40 +12,80 @@ export const reqWeather = async (city) => {
   return result;
 };
 
-export function getLogin(loginId, loginPwd) {
+export async function getLogin(loginId, loginPwd) {
   console.log("here");
-  const user = datas.user.filter(
-    (item) => item.loginId === loginId && item.loginPwd === loginPwd
+  var tableName = "users";
+  var columns = "*";
+  var condition = `FirstName='${loginId}'and Password='${loginPwd}'`;
+  const user = await ajax(
+    "/fetchValues",
+    { tableName, columns, condition },
+    "post"
   );
   console.log("user", user);
-  if (user) return 1;
+  if (user !== []) return user;
   else {
     return 0;
   }
 }
 
 //add user
-export function addUser(user) {
-  datas.user.push(user);
-  return 1;
+export async function addUser(user) {
+  var tableName = "users";
+  var id = Math.round(Math.random() * 300 + 10);
+  var values = `'${id}','${user.loginId}','${user.loginId}','${user.email}','${user.loginPwd}','${user.role}'`;
+
+  var users = await ajax("/insertValues", { tableName, values }, "post");
+  console.log("user", users);
+  if (users !== []) return users;
+  else {
+    return 0;
+  }
 }
 //update user
-export function updateUser(id, loginId, loginPwd, email, role) {
-  //to do
+export async function updateUser(id, loginId, loginPwd, email, role) {
+  var tableName = "users";
+  var columsAndvalues = `FirstName='${loginId}',Password='${loginPwd}',Email='${email}',SecurityLevel='${role}'`;
+  var condition = `UserID='${id}'`;
+  const result = await ajax(
+    "/updateValues",
+    { tableName, columsAndvalues, condition },
+    "post"
+  );
+  console.log("result", result);
+  if (result !== []) return result;
+  else {
+    return 0;
+  }
 }
 //delete user
-export function deleteUser(id) {
-  const user = datas.user.filter((item) => {
-    item.id = id;
-  });
-  const index = datas.user.indexOf(user);
-  datas.user.slice(index, 1);
-  return 1;
+export async function deleteUser(id) {
+  var tableName = "users";
+  var columns = "*";
+  var condition = `UserID='${id}'`;
+  const result = await ajax("/deleteValues", { tableName, columns }, "post");
+  console.log("result", result);
+  if (result !== []) return result;
+  else {
+    return 0;
+  }
 }
 
 //get the userlist information
-export function getUsers() {
-  return datas.user;
+export async function getUsers() {
+  var tableName = "users";
+  var columns = "*";
+  var condition = ``;
+  const user = await ajax(
+    "/fetchValues",
+    { tableName, columns, condition },
+    "post"
+  );
+  console.log("user", user);
+  if (user !== []) return user;
+  else {
+    return 0;
+  }
 }
 
 //adding a new role
