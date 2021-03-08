@@ -3,8 +3,10 @@ import CustomSelect from "./Components/CustomSelect.js";
 import ToggleSwitch from "./Components/ToggleSwitch.js";
 import Button from "./Components/Button.js";
 import Modal from "./Components/Modal.js";
+
 import TextInput from "./Components/TextInput";
 import "./App.css";
+
 
 function BattingForm(props) {
 

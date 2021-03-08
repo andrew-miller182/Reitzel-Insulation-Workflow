@@ -1,9 +1,12 @@
 *{
+
    font-family: "Helvetica"; 
    font-weight: bolder; 
    font-size: 20px;
+
 }
 /*class name quote*/
+
 
 .App {
   font-family: sans-serif;
@@ -22,6 +25,7 @@
 }
 .toggle {
   margin: 10px;
+
 }
 button {
   padding: 10px 20px;
@@ -42,7 +46,6 @@ button {
 }
 
 form {
-
   width: 900px;
   padding: 20px;
   margin-left: 1%;
@@ -157,6 +160,7 @@ form {
   background-color: #ccc;
   cursor: not-allowed;
 } 
+
 .toggle-switch-inner:after {
   content: attr(data-no);
   text-transform: uppercase;
