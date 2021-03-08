@@ -18,15 +18,15 @@
   export const regionColor = [
     {
       region:"Elmira & area",
-      color:""
+      color:"#cf9774"
     },
     {
       region:"Guelph & area",
-      color:""
+      color:"#9ca7ff"
     },
     {
       region:"Cambridge & area",
-      color:""
+      color:"#ff7570"
     },
     {
       region:"Hamilton & area",
@@ -57,23 +57,30 @@
 
   export const data = [
       {
-        id:'50',
+        id:3,
         firstName:"Mark",
         lastName:"Ringo",
         billingAddress:"545 Lakeview Drive",
         city:"Hamilton",
-        postalCode:"",
-        phoneNumber:"",
-        email:"",
+        postalCode:"T3M0X3",
+        phoneNumber:"4036512514",
+        email:"mark@gmail.com",
         region:"Hamilton & area",
         siteAddress:"",
         siteCity:"",
         sitePostalCode:"",
         typeOfJob:"Foam",
         text:"Check out old foam and replace",
-        salesman:"1",
-        startDate: new Date('2021-02-02T12:30:00.000Z'),
+        salesman:1,
+        startDate: new Date('2021-02-02T09:30:00.000Z'),
         endDate: new Date('2021-02-02T18:30:00.000Z')
+      },
+      {
+        id:1,
+        salesman:2,
+        text:"tester",
+        startDate:new Date('2021-02-03T20:00:00.000Z'),
+        endDate:new Date('2021-02-03T21:30:00.000Z')
       }
       
     ];

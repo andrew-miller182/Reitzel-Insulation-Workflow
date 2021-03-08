@@ -3,14 +3,14 @@ import Query from 'devextreme/data/query';
 import {salesmanData} from './salesData.js';
 
 function getSalesById(id) {
-  return Query(salesmanData).filter(['name', id]).toArray()[0];
+  return Query(salesmanData).filter(['id', id]).toArray()[0];
 }
 
 export default class SalesTooltip extends React.Component {
     constructor(props){
       super(props);
       this.state= {
-        salesData:getSalesById(props.data.appointmentData.id)
+        salesData:getSalesById(props.data.appointmentData.salesman)
       };
     }
     render(){
@@ -19,13 +19,13 @@ export default class SalesTooltip extends React.Component {
       <div>
           <div>
             <div>
-              {appointmentData.description}
+              {this.props.text}
             </div>
             <div>
-              Salesman: {appointmentData.salesData}
+              Salesman: {appointmentData.salesData.name}
             </div>
             <div>
-              Address: {appointmentData.billingAddress}
+              Address: {this.props.billingAddress}
             </div>
           </div>
         </div>

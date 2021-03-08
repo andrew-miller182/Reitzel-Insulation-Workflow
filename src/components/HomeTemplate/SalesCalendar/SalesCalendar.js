@@ -11,7 +11,7 @@ import { data, salesmanData, regionColor} from './salesData';
 const currentDate = new Date();
 let date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 const views = ['day','week', 'workWeek','month'];
-const groups = ['id'];
+const groups = ['salesman'];
 
 const onAppointmentDeleting = (e) => {
   window.confirm("Are you sure you wish to delete this appointment?") &&
@@ -49,14 +49,14 @@ class SalesCalendar extends React.Component {
         defaultCurrentDate={date}
         height={800}
         startDayHour={6}
-        //appointmentComponent={SalesTemplate}
-        appointmentTooltipComponent={SalesTooltip}
+        appointmentComponent={SalesTemplate}
+        //appointmentTooltipComponent={SalesTooltip}
         onAppointmentDeleting={onAppointmentDeleting}
         onAppointmentFormOpening={this.onAppointmentForm}
         >
         <Resource
           dataSource={salesmanData}
-          fieldExpr="id"
+          fieldExpr="salesman"
           >
         </Resource>
         <Resource
