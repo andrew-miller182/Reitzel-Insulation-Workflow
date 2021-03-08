@@ -1,0 +1,17 @@
+.layout {
+  min-height: 100vh;
+}
+.header {
+  background-color: white;
+  padding-left: 0;
+  padding-right: 0;
+  height: 90px;
+  display: flex;
+  flex-direction: row;
+}
+.ant-layout-content {
+  padding: 10px;
+}
+.ant-layout-footer {
+  padding: 10px;
+}
