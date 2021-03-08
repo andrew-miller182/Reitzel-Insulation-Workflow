@@ -13,8 +13,9 @@ export default function Login(props) {
     const { loginId, loginPwd } = values;
     const result = await getLogin(loginId, loginPwd);
     reqWeather("calgary");
-    if (result === 1) {
+    if (result.data && result.data.length > 0) {
       props.history.replace("/");
+      setUser(result.data[0]);
       message.success("Login Success!");
     } else {
       message.info("Username or Password not correct!");

@@ -22,6 +22,8 @@ export default function Users() {
   const [onSelected, setonSelected] = useState();
   const [, setForce] = useState();
 
+  const [users, setusers] = useState([]);
+
   //the selected to be updated or deleted data
   const [selectedData, setselectedData] = useState({});
   const title = (
@@ -83,7 +85,6 @@ export default function Users() {
             type="primary"
             onClick={() => {
               setselectedData(data);
-
               showDeleteConfirm(data.key);
             }}
           >
@@ -100,7 +101,7 @@ export default function Users() {
     const value = form.getFieldsValue();
     const { loginId, loginPwd, email, role } = value;
     const result = await addUser({ loginId, loginPwd, email, role });
-    if (result === 1) {
+    if (result.data && result.data.affectedRows > 0) {
       message.success("Success!");
       setAddShow(false);
       setForce();
@@ -114,10 +115,11 @@ export default function Users() {
     const value = form1.getFieldsValue();
     const { loginId, loginPwd, email, role } = value;
     const id = selectedData.key;
-
+    console.log("id", id);
     //update data in the backend
     const result = await updateUser(id, loginId, loginPwd, email, role);
     setupdateShow(false);
+    console.log(result);
     if (result.data.status === 1) {
       message.success("success!");
     }
@@ -149,14 +151,28 @@ export default function Users() {
     });
   };
 
+  useEffect(() => {
+    const func = async () => {
+      var result = await getUsers();
+      var tables = result.data.map((item) => ({
+        id: item.UserId,
+        loginId: item.FirstName,
+        loginPwd: item.Password,
+        emial: item.Email,
+        role: item.SecurityLevel,
+      }));
+      setusers(tables);
+    };
+    func();
+  }, [users.length]);
   return (
     <div className="settings-user">
       <Card title={title} bordered>
         <Table
           style={{ width: "80%", margin: "0 auto" }}
-          rowKey="key"
+          rowKey="id"
           bordered
-          dataSource={datas.user}
+          dataSource={users}
           columns={columns}
           tableLayout="auto"
           pagination={{ pageSize: 3 }}
