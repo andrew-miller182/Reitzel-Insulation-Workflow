@@ -7,6 +7,9 @@ export const useInput = initialValue => {
         value,
         setValue,
         reset: () => setValue(""),
+
+        assignValue: (value) => setValue(value),
+
         bind: {
             value,
             onChange: event => {
