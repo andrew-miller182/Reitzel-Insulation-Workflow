@@ -9,6 +9,9 @@
     "antd": "^4.10.3",
     "axios": "^0.21.1",
     "jsonwebtoken": "^8.5.1",
+    "devextreme": "^20.2.4",
+    "devextreme-react": "^20.2.3",
+    "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
@@ -16,6 +19,7 @@
     "react-scripts": "4.0.1",
     "redux": "^4.0.5",
     "store": "^2.0.12",
+    "scheduler": "^0.20.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
@@ -42,5 +46,10 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5001"
+  "proxy": "http://localhost:5001",
+  "devDependencies": {
+    "devextreme-cldr-data": "^1.0.3",
+    "devextreme-themebuilder": "^20.2.4",
+    "globalize": "^1.6.0"
+  }
 }
