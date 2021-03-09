@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Tabs from "./Tabs"; 
-import SalesCalendar from './SalesCalendar/SalesCalendar';
-import FoamCalendar from './FoamCalendar/FoamCalendar';
-import FillCalendar from './FillCalendar/FillCalendar';
+import Tabs from "../../Components/HomeTemplate/Tabs"; 
+import SalesCalendar from '../../Components/HomeTemplate/SalesCalendar/SalesCalendar';
+import FoamCalendar from '../../Components/HomeTemplate/FoamCalendar/FoamCalendar';
+import FillCalendar from '../../Components/HomeTemplate/FillCalendar/FillCalendar';
 import './Template.css';
 
 class Template extends React.Component {
@@ -13,7 +13,6 @@ class Template extends React.Component {
         
         return(
       <div>
-        <h1>Tabs Demo</h1>
        <Tabs> 
          <div label="Sales"> 
            <SalesCalendar />
