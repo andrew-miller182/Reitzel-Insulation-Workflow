@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-var myApi = require('./Database API//apiAsync')
+let myApi = require('./Database API//apiAsync')
+let myEmailApi = require('./Email API/emailApi')
 const app = express()
 const port = 5001
 
@@ -45,6 +46,38 @@ app.post('/processCustomQuery', async (req, res) => {
   let { sql } = req.body
   let output = await myApi.processCustomQuery(sql)
   res.send(output)
+})
+
+app.post('/sendEmailText', async (req, res) => {
+  let { to, subject, text } = req.body
+  await myEmailApi.sendEmailText(
+    (status, info) => {
+      if (status === true) {
+        res.send('Email Sent: ' + JSON.stringify(info))
+      } else {
+        res.send('Error Occured: ' + JSON.stringify(info))
+      }
+    },
+    to,
+    subject,
+    text,
+  )
+})
+
+app.post('/sendEmailHtml', async (req, res) => {
+  let { to, subject, html } = req.body
+  await myEmailApi.sendEmailHtml(
+    (status, info) => {
+      if (status === true) {
+        res.send('Email Sent: ' + JSON.stringify(info))
+      } else {
+        res.send('Error Occured: ' + JSON.stringify(info))
+      }
+    },
+    to,
+    subject,
+    html,
+  )
 })
 
 app.listen(port, () => {
