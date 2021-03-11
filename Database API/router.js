@@ -7,7 +7,7 @@ const port = 5001
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-app.get('/fetchValues', async (req, res) => {
+app.post('/fetchValues', async (req, res) => {
   //let { tableName, columns, condition } = req.body
   let tableName = req.body.tableName
   let columns = req.body.columns || '*'
