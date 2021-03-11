@@ -1,8 +1,9 @@
 let nodemailer = require('nodemailer')
 let config = require('./config')
+const { encrypt, decrypt } = require('../Encryption Api/crypto')
 let mailService = config.mailService
 let mailUser = config.mailUser
-let mailPassword = config.mailPassword
+let mailPassword = decrypt(config.mailPassword)
 
 let sendEmailText = async (callback, _to, _subject, _text) => {
   let status = false
