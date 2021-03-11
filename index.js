@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const { encrypt, decrypt } = require('./Encryption Api/crypto')
 let myApi = require('./Database API//apiAsync')
 let myEmailApi = require('./Email API/emailApi')
 const app = express()
@@ -78,6 +79,16 @@ app.post('/sendEmailHtml', async (req, res) => {
     subject,
     html,
   )
+})
+
+app.post('/encrypt', async (req, res) => {
+  let { data } = req.body
+  res.send(encrypt(data))
+})
+
+app.post('/decrypt', async (req, res) => {
+  let { data } = req.body
+  res.send(decrypt(data))
 })
 
 app.listen(port, () => {
