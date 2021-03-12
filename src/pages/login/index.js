@@ -1,27 +1,26 @@
-import React from 'react'
-import { Button, Form, Input, message } from 'antd'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import './index.css'
-import { getLogin, reqWeather } from '../../api/index'
-import { setUser, getUser } from '../../util/storage'
-import Catch from '../../util/catch'
-import { Redirect } from 'react-router-dom'
+import React, { useState } from "react";
+import { Button, Form, Input, message } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import "./index.css";
+import { getLogin, reqWeather } from "../../api/index";
+import { setUser, getUser } from "../../util/storage";
+import { Redirect } from "react-router-dom";
 
-const { Item } = Form
+const { Item } = Form;
 export default function Login(props) {
   const handleSubmit = async (values) => {
-    const { loginId, loginPwd } = values
-    const result = await getLogin(loginId, loginPwd)
-    reqWeather('calgary')
+    const { loginId, loginPwd } = values;
+    const result = await getLogin(loginId, loginPwd);
+    reqWeather("calgary");
     if (result.data && result.data.length > 0) {
-      props.history.replace('/')
-      setUser(result.data[0])
-      message.success('Login Success!')
+      setUser(result.data[0]);
+      props.history.replace("/");
+      message.success("Login Success!");
     } else {
-      message.info('Username or Password not correct!')
+      message.info("Username or Password not correct!");
     }
-  }
-  //if (getUser()) return <Redirect to="/" />;
+  };
+  if (getUser()) return <Redirect to="/" />;
   return (
     <div className="login_page">
       <div className="login">
@@ -32,12 +31,12 @@ export default function Login(props) {
             rules={[
               {
                 required: true,
-                message: 'Cannot be Emptry!',
+                message: "Cannot be Emptry!",
               },
             ]}
           >
             <Input
-              style={{ backgroundColor: 'transparent' }}
+              style={{ backgroundColor: "transparent" }}
               prefix={<UserOutlined />}
               placeholder="username"
             />
@@ -47,7 +46,7 @@ export default function Login(props) {
             rules={[
               {
                 required: true,
-                message: 'Cannot be Empty',
+                message: "Cannot be Empty",
               },
             ]}
           >
@@ -67,5 +66,5 @@ export default function Login(props) {
         </Form>
       </div>
     </div>
-  )
+  );
 }
