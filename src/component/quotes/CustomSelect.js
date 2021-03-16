@@ -1,32 +1,30 @@
 import React, { useState } from "react";
 
 function CustomSelect(props) {
-
 	const [data] = useState(props.data);
-	const [selectedData, setSelectedData] = useState({});
+	const [quoteDataId, setQuoteDataId] = useState(props.quoteDataId);
 
-  function onChange(event) {
-    var val = data.find(d => d.id == event.target.value);
-    setSelectedData(val)
-    if (props.onSelectChange){
-      props.onSelectChange(val);
-    }
+	function onChange(event) {
+		// setQuoteDataId(event.target.value);
+		if (props.onSelectChange) {
+			props.onSelectChange(event.target.value);
+		}
 	}
 
-  let options = data.map((d) => (
-		<option key={d.id} value={d.id} data={d}>
+	let options = data.map((d) => (
+		<option key={d.id} value={d.id} data={d} selected={(d.id == quoteDataId )?true:false} >
 			{d.name}
 		</option>
 	));
 
-  return (
+	return (
 		<select
 			name="customSearch"
-      className="custom-search-select"
-      onChange={onChange}
-      placeholder="Select Item"
+			className="custom-search-select"
+			onChange={onChange}
+			placeholder="Select Item"
 		>
-			<option value="" >Select Item</option>
+			<option value="">Select Item</option>
 			{options}
 		</select>
 	);

@@ -1,37 +1,41 @@
-import React, {useState} from "react";
-// import CustomSelect from "../../component/quotes/CustomSelect.js";
-// import ToggleSwitch from "../../component/quotes/ToggleSwitch.js";
+import React, {useState, useEffect} from "react";
+import { useRouteMatch, useHistory } from "react-router-dom";
 import Button from "../../component/quotes/Button";
-// import Modal from "../../component/quotes/Modal.js";
-// import TextInput from "../../component/quotes/TextInput"
 import {useInput} from '../../hooks/input-hook';
-// import QuoteOneView from "../../component/quotes/QuoteOneView";
-import {useSelector} from "react-redux";
-import {useDispatch} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import CustomSelect from "../../component/quotes/CustomSelect";
-import axios from "axios";
+import qData from './quoteData.js';
+
 
 function QuoteOne(props) {
+    
+    let { path, url } = useRouteMatch();
+    let history = useHistory();
 
     const {value, bind, reset} = useInput('');
-    const data = useSelector(state => state.quoteOneReducer.quote_one);
+    const data = useSelector( state => state.quoteOneReducer.quote_one);
+    
+    const [quoteData, setQuoteData] = useState(props.quoteData);
+
+    useEffect(() => {
+        setQuoteData(props.quoteData);
+    },[props.quoteData]);
 
     const dispatch = useDispatch();
-
     const {value: firstName, bind: bindFirstName, reset: resetFirstName,assignValue: assignFirstName} = useInput();
     const {value: lastName, bind: bindLastName, reset: resetLastName,assignValue: assignLastName} = useInput();
-    const {value: billingAddress, bind: bindBillingAddress, reset: resetBillingAddress} = useInput('');
-    const {value: city, bind: bindCity, reset: resetCity} = useInput('');
-    const {value: postCode, bind: bindPostCode, reset: resetPostCode} = useInput('');
-    const {value: phoneNumber, bind: bindPhoneNumber, reset: resetPhoneNumber} = useInput('');
-    const {value: email, bind: bindEmail, reset: resetEmail} = useInput('');
-    const {value: customerNotes, bind: bindCustomerNotes, reset: resetCustomerNotes} = useInput('');
-    const {value: installerNotes, bind: bindInstallerNotes, reset: resetInstallerNotes} = useInput('');
-    const {value: salesman, bind: bindSalesman, reset: resetSalesman} = useInput('');
-    const {value: wsib, bind: bindWsib, reset: resetWsib} = useInput(props.quoteData.wsib);
-    const {value: account, bind: bindAccount, reset: resetAccount} = useInput(props.quoteData.account);
-    const {value: firm, bind: bindFirm, reset: resetFirm} = useInput(props.quoteData.firm);
-    const {value: details, bind: bindDetails, reset: resetDetails} = useInput(props.quoteData.details);
+    const {value: billingAddress, bind: bindBillingAddress, reset: resetBillingAddress, assignValue: assignBillingAddress} = useInput();
+    const {value: city, bind: bindCity, reset: resetCity, assignValue: assignCity} = useInput();
+    const {value: postCode, bind: bindPostCode, reset: resetPostCode,assignValue: assignPostCode} = useInput();
+    const {value: phoneNumber, bind: bindPhoneNumber, reset: resetPhoneNumber, assignValue: assignPhoneNumber} = useInput();
+    const {value: email, bind: bindEmail, reset: resetEmail, assignValue: assignEmail} = useInput();
+    const {value: customerNotes, bind: bindCustomerNotes, reset: resetCustomerNotes, assignValue: assignCustomerNotes} = useInput();
+    const {value: installerNotes, bind: bindInstallerNotes, reset: resetInstallerNotes, assignValue: assignInstallerNotes} = useInput();
+    const {value: salesman, bind: bindSalesman, reset: resetSalesman, assignValue: assignSalesman} = useInput();
+    const {value: wsib, bind: bindWsib, reset: resetWsib} = useInput(quoteData.wsib);
+    const {value: account, bind: bindAccount, reset: resetAccount} = useInput(quoteData.account);
+    const {value: firm, bind: bindFirm, reset: resetFirm} = useInput(quoteData.firm);
+    const {value: details, bind: bindDetails, reset: resetDetails} = useInput(quoteData.details);
 
     const [productCounter, setProductCounter] = useState(0)
     const [products, setProducts] = useState([{
@@ -42,45 +46,16 @@ function QuoteOne(props) {
     }])
 
     const [customer, setCustomer] = useState("");
- /*
-    const customer = axios.get('/featchData')
-                    .then((resp) => {
-                        console.log(resp);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-*/
 
-    const customers = [
-        {
-            id: "1",
-            name:"Simran",
-            first_name: "Sim",
-            last_name: "Ran",
+    //const customers = qData.getGustomers();
+    const customers = qData.customer_data;
+    
 
-        },
-        {
-            id: "2",
-            name:"Dhiraj",
-            first_name: "Dhi",
-            last_name: "raj",
-
-        },
-        {
-            id: "3",
-            name:"lieang",
-            first_name: "lie",
-            last_name: "ang",
-
-        }
-    ];
 
     function onCustomerSelect(e) {
-        if (e == null || e == "" || e == undefined) {
+        if (!(e == null || e == "" || e == undefined)) {
             setCustomer(null)
         } else {
-            console.log(e)
             setCustomer(e);
             assignFirstName(e.first_name)
             assignLastName(e.last_name)
@@ -98,14 +73,17 @@ function QuoteOne(props) {
             post_code: postCode,
             phone_number: phoneNumber,
             email: email,
-            details: details,
             customer_notes: customerNotes,
             installer_notes: installerNotes,
             salesman: salesman,
             wsib: wsib,
             account: account,
             firm: firm,
-            products: products
+            products: products,
+            total: total,
+            taxper: taxper,
+            tax: tax,
+            details: details
         }
 
         dispatch({
@@ -113,15 +91,18 @@ function QuoteOne(props) {
             payload: payload
         })
 
-        setFormSubmit(true)
+        props.onSetQuoteFormDataChange(payload);
+        // history.push(`/quotes/${quoteData.id}/print/`)
+        // setFormSubmit(true)
         reset();
         evt.preventDefault();
     }
 
     const [total, setTotal] = useState(0)
+    const [taxper, setTaxper] = useState(13)
+    const [tax, setTax] = useState(0)
 
     const handleSubmitEvent = (values) => {
-
         console.log((values))
         values.preventDefault();
     }
@@ -144,28 +125,54 @@ function QuoteOne(props) {
         var temp = products
         temp[i]["price"] = e.target.value
         setProducts(temp)
+        // var calTotal = 0
+        // console.log(products)
+        // products.map(product => {
+        //     // console.log(product["price"])
+        //     calTotal += parseFloat(product["price"])
+        // })
+        // // console.log(products)
+        // console.log(parseFloat(calTotal).toFixed(2))
+        // var taxc = ((total * taxper)/100);
+        // calTotal += taxc;
+        // setTotal(parseFloat(calTotal).toFixed(2))
+        // setTax(parseFloat(taxc).toFixed(2))
+        totalCalc();
+    }
 
-        var calTotal = 0
+    const changeTaxper = (e) => {
+        var temp = e.target.value;
+        totalCalc();
+        setTaxper(temp)
+    }
 
-        console.log(products)
+    const totalCalc = () => {
+        var temp = products
+        var calTotal = 0;
         products.map(product => {
-            // console.log(product["price"])
             calTotal += parseFloat(product["price"])
         })
-
-        // console.log(products)
-        console.log(parseFloat(calTotal).toFixed(2))
-
+        var taxc = ((total * taxper)/100);
+        calTotal += taxc;
         setTotal(parseFloat(calTotal).toFixed(2))
+        setTax(parseFloat(taxc).toFixed(2))
+    }
+
+    const changeTax = (e) => {
+        var temp = e.target.value;
+        setTax(temp)
+    }
+
+
+    const changeTotal = (e) => {
+        var temp = e.target.value;
+        setTotal(temp)
     }
 
 
     const renderRows = (prod) => {
         let rows = []
-        console.log("Products is" + products.length)
-
-        console.log(products)
-
+        
         for (let i = 0; i <= productCounter; i++) {
 
 
@@ -220,9 +227,7 @@ function QuoteOne(props) {
             price: 0.00
 
         }
-        console.log(JSON.stringify(tempProducts))
         setProducts(tempProducts)
-
     }
 
     if (formSubmit) {
@@ -230,7 +235,7 @@ function QuoteOne(props) {
 
         return (
             <div className="Quote">
-                <h2> {props.quotename}</h2>
+                <h2> {quoteData.quotename}</h2>
                 <p>
                     Attention: {data.first_name} {data.last_name}
                 </p>
@@ -249,9 +254,7 @@ function QuoteOne(props) {
                 Email:
                 {data.email}
                 <br/>
-                <br/>
                 {data.details}
-                <br/>
                 <br/>
                 {data.products.length > 0 &&
                 <table>
@@ -288,25 +291,20 @@ function QuoteOne(props) {
                 WSIB# {data.wsib}
                 <br/>
                 Account: {data.account}
-
                 <br/>
                 Firm # {data.firm}
                 <br/>
-
             </div>
         )
     } else {
-        console.log(products)
         return (
             <form onSubmit={handleSubmit}>
-                
                 <div className="Quote">
-                    <h2> {props.quotename}</h2>
+                    <h2> {quoteData.name}</h2>
                     <p>
-                        <div>
-                            <label> Select Customer</label>
-                            <CustomSelect data={customers} onSelectChange={onCustomerSelect}/>
-                        </div>
+                        Select Customer:
+                        <CustomSelect data={customers} onSelectChange={onCustomerSelect}/>
+                        <br/>
                         Customer:
                         <input type="text" className="ant-input ant-col-8" name="first_name"
                                placeholder="First Name" {...bindFirstName} />
@@ -314,7 +312,6 @@ function QuoteOne(props) {
                                placeholder="Last Name" {...bindLastName} />
                         <br/>
                         Address:
-
                         <input type="text" className="ant-input" name="billing_address"
                                placeholder="Billing Address" {...bindBillingAddress} />
                         <br/>
@@ -338,8 +335,9 @@ function QuoteOne(props) {
                                placeholder="contractor email" {...bindEmail} />
                         <br/>
                         Quotes Details:
-                        <textarea  className="ant-text-area" name="details"
-                               placeholder="" {...bindDetails}  />
+                        <input  className="ant-input ant-textarea" name="details"
+                               placeholder="Quote Details" {...bindDetails}  />
+                               
                         <br/>
                         <table>
                             <thead>
@@ -359,8 +357,31 @@ function QuoteOne(props) {
                                 </td>
                             </tr>
                             <tr>
+                                <td colSpan="2">Tax %: ---------------------------------------------</td>
+                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01"
+                               placeholder="Quote Tax %" value={taxper} 
+                               onChange={(e) => {
+                                changeTaxper(e)
+                                }}
+                               /></td>
+                            </tr>
+                            <tr>
+                                <td colSpan="2">Tax Calc: ------------------------------------------</td>
+                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01"
+                               placeholder="Quote Tax $" value={tax} 
+                               onChange={(e) => {
+                                changeTax(e)
+                                }}
+                               /></td>
+                            </tr>
+                            <tr>
                                 <td colSpan="2">Total: ---------------------------------------------</td>
-                                <td>${total}</td>
+                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01"
+                               placeholder="Quote Total" value={total} 
+                               onChange={(e) => {
+                                changeTotal(e)
+                                }}
+                               /></td>
                             </tr>
                             </tfoot>
                         </table>
@@ -386,12 +407,8 @@ function QuoteOne(props) {
 
                         <br/> <br/>
                         Account:  #{account}
-                        {/*<input type="text" className="ant-input" name="account"*/}
-                        {/*       placeholder="Account No" {...bindAccount} />*/}
-
                         <br/>
                         Firm: #{firm}
-                        {/*<input type="text" className="ant-input" placeholder="Firm" {...bindFirm} />*/}
                         <br/>
                         <br/>
                         <Button size="2" varient="primary" type="submit" class="ant-btn ant-btn-primary">Submit</Button>
