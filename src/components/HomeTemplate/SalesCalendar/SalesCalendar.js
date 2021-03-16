@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
 import Switch from 'devextreme-react/switch';
 import Scheduler, {Resource} from 'devextreme-react/scheduler';
 import SalesTemplate from './SalesTemplate.js'
-import SalesTooltip from './salesTooltip.js'
-
+import SalesTooltip from './salesTooltip.js';
 import { data, salesmanData, regionColor} from './salesData';
+import {getEstimates, deleteEstimate} from '../../../api/calendar';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+const url = '../../../api/calendar';
+const dataSource = AspNetData.createStore({
+  key: 'EstimateId',
+  loadUrl: `${url }/Get`,
+  insertUrl: `${url }/Post`,
+  updateUrl: `${url }/Put`,
+  deleteUrl: `${url }/Delete`,
+  onBeforeSend(_, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
+  }
+});
+
 
 const currentDate = new Date();
 let date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
@@ -25,9 +38,33 @@ class SalesCalendar extends React.Component {
       groupByDate:true,
       cancel:true
     };
+    
     this.onGroupByDateChanged = this.onGroupByDateChanged.bind(this);
     this.onAppointmentForm = this.onAppointmentForm.bind(this);
+/*
+    const [estimates, setestimates] = useState([]);
+    useEffect(() => {
+  const func = async () => {
+    var result = await getEstimates();
+    var estimates = result.data.map((item) =>({
+      id: item.data.EstimateID,
+      customerID: item.data.CustomerID,
+      addressID: item.data.AddressID,
+      userID: item.data.UserID,
+      jobtype: item.data.JobType,
+      creation: item.data.CreationDate,
+      info:item.data.EstimateInfo,
+      startDate: item.data.startDate,
+      endDate: item.data.endDate
+    }));
+    setestimates(estimates);
+  };
+  func();
+}, [estimates.length]);
+*/
   }
+  
+  
   onAppointmentForm(args) {
     args.cancel = true;
   }
@@ -43,7 +80,7 @@ class SalesCalendar extends React.Component {
         groups = {groups}
         groupByDate={this.state.groupByDate}
         timeZone="America/Los_Angeles"
-        dataSource={data}
+        dataSource={dataSource}
         views={views}
         defaultCurrentView="workWeek"
         defaultCurrentDate={date}

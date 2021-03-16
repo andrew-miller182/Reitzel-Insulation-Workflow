@@ -158,7 +158,7 @@ export default function Users() {
         id: item.UserId,
         loginId: item.FirstName,
         loginPwd: item.Password,
-        emial: item.Email,
+        email: item.Email,
         role: item.SecurityLevel,
       }));
       setusers(tables);

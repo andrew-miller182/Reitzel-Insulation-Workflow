@@ -7,6 +7,7 @@ import Invoices from "../../pages/invoices";
 import Customers from "../../pages/customers";
 import Users from "../../pages/users";
 import Roles from "../../pages/roles";
+import CustomerInfo from "../../pages/customerInfo";
 import "./index.css";
 export default function Main() {
   return (
@@ -19,6 +20,7 @@ export default function Main() {
         <Route path="/customers" component={Customers} />
         <Route path="/users" component={Users} />
         <Route path="/roles" component={Roles} />
+        <Route path="/customerinfo/:customer" component={CustomerInfo} />
         <Redirect to="/home"></Redirect>
       </Switch>
     </div>
