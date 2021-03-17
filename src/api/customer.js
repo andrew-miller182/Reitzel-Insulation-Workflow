@@ -45,7 +45,7 @@ export async function getCustomers() {
 
     }
   export async function getCustomerAddresses(id){
-    var tableName = "Addresses";
+    var tableName = "address";
     var condition = `CustomerID = '${id}'`
     const addressList = await ajax(
       "/fetchValues",

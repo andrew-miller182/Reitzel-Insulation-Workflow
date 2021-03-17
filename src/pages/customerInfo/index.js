@@ -2,12 +2,14 @@ import React, {useEffect, setState, useState} from 'react';
 import { Card, Table, Button, Modal, Form, Input, message, Select } from "antd";
 import {getRegion, getAddresses, getCustomer, getCustomerAddresses} from '../../api/customer';
 import { useRouteMatch } from "react-router-dom";
+import Tab from '../../Components/HomeTemplate/Tab';
 
 export default function CustomerInfo() {
  
   let match = useRouteMatch('/customerinfo/:customer').params.customer;
   const [customerInfo, setcustomerinfo] = useState([]);
   const [regionName, setRegionName] = useState([]);
+  const [addressList, setAddressList] = useState([]);
     useEffect(() => {
         const func = async () => {
           var result = await getCustomer(match);
@@ -26,6 +28,7 @@ export default function CustomerInfo() {
         };
         func();
         getRegionName();
+        getAddressList();
       }, [customerInfo.length]);
 
     const getRegionName = async () => {
@@ -35,6 +38,59 @@ export default function CustomerInfo() {
       }))
       setRegionName(name[0]);
     }
+    const getAddressList = async () => {
+        var result = await getCustomerAddresses(match);
+        var addresses = result.data.map((item) =>({
+          id: item.AddressID,
+          address: item.Address,
+          postalcode: item.PostalCode,
+          city: item.City,
+          prov: item.Province,
+          region: item.Region
+        }));
+        setAddressList(addresses);
+        console.log(addresses);
+      };
+    const columns =[
+      {
+        title:"Address",
+        dataIndex:"address",
+        key:""
+      },
+      {
+        title:"Postal Code",
+        dataIndex:"postalcode",
+        key:""
+      },
+      {
+        title:"City",
+        dataIndex:"city",
+        key:""
+      },
+      {
+        title:"Province",
+        dataIndex:"prov",
+        key:""
+      },
+      {
+        title:"Region",
+        dataIndex:"region",
+        key:""
+      },
+      {
+        title:"New Quote",
+        dataIndex:"",
+        key:""
+      },
+      {
+        title:"View Quotes",
+        dataIndex:"",
+        key:""
+      },
+
+      
+
+    ]
       return(
         <div>
         <Card title="Customer Information">
@@ -48,7 +104,16 @@ export default function CustomerInfo() {
             <p>Postal Code: {customerInfo.postal}</p>
             <p>Region: {regionName.name}</p>
         </Card>
+        <Table
+        style={{ width: "80%", margin: "0 auto" }}
+        rowKey="id"
+        bordered
+        dataSource={addressList}
+        columns={columns}
+        tableLayout="auto"
+        pagination={{ pageSize: 10 }}>
 
+          </Table>
         </div>
       )
     }
