@@ -1,12 +1,12 @@
 /*
 {
-    "to": "dheerajarora2246@gmail.com",
+    "to": "d.arora977@mybvc.ca",
     "subject": "Test Subject",
     "text": "Test Text"
 }
 
 {
-    "to": "dheerajarora2246@gmail.com",
+    "to": "d.arora977@mybvc.ca",
     "subject": "Test Subject",
     "html": "<html><h1>Hi</h1><h4>Testing</h4></html>"
 }
