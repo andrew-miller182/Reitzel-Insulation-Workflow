@@ -67,7 +67,7 @@ let sendEmailHtml = async (callback, _to, _subject, _html) => {
   //   to: _to,
   //   subject: _subject,
   //   html: CircularJSON.parse(stringHtmlFile),
-  }
+  //}
 
   //----------------------------Testing Code
 
