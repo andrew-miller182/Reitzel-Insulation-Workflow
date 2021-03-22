@@ -78,17 +78,18 @@ export default function CustomerInfo() {
         key:""
       },
       {
-        title:"New Quote",
-        dataIndex:"",
-        key:""
-      },
-      {
-        title:"View Quotes",
-        dataIndex:"",
-        key:""
-      },
-
-      
+        title:"Show Address Info",
+        key:"OpenAddress",
+      render: (data) => ( 
+      <div className="operate-button">
+          <Button
+          type="link"
+          href={`/addressinfo/${data.id}`}
+            >
+           Show Address Details
+          </Button>
+         </div>)
+      }   
 
     ]
       return(
@@ -102,7 +103,7 @@ export default function CustomerInfo() {
             <p>Billing Address: {customerInfo.billing}</p>
             <p>City: {customerInfo.city}</p>
             <p>Postal Code: {customerInfo.postal}</p>
-            <p>Region: {regionName.name}</p>
+            
         </Card>
         <Table
         style={{ width: "80%", margin: "0 auto" }}
