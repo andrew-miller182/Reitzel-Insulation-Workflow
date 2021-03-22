@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { setState, useState, useEffect } from "react";
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
 import Switch from 'devextreme-react/switch';
@@ -6,25 +6,34 @@ import Scheduler, {Resource} from 'devextreme-react/scheduler';
 import SalesTemplate from './SalesTemplate.js'
 import SalesTooltip from './salesTooltip.js';
 import { data, salesmanData, regionColor} from './salesData';
-import {getEstimates, deleteEstimate} from '../../../api/calendar';
-import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import {getEstimates, deleteEstimate, getUsers, updateEstimate} from '../../../api/calendar';
+import CustomStore from 'devextreme/data/custom_store';
+import { CommonAxisSettingsLabel } from "devextreme-react/chart";
 const url = '../../../api/calendar';
-const dataSource = AspNetData.createStore({
-  key: 'EstimateId',
-  loadUrl: `${url }/Get`,
-  insertUrl: `${url }/Post`,
-  updateUrl: `${url }/Put`,
-  deleteUrl: `${url }/Delete`,
-  onBeforeSend(_, ajaxOptions) {
-    ajaxOptions.xhrFields = { withCredentials: true };
+const dataSource = new CustomStore({
+  key: "EstimateID",
+  load: async () => {
+    const data = await getEstimates();
+    console.log(data.data);
+    return data.data
+  },
+  update: async (key, values) => {
+    console.log(values);
+    const check = await updateEstimate(key, values);
+    return check;
   }
 });
 
+const salesmanSource = async () =>{
+  console.log("did mount");
+  const data = await getUsers();
+  return data.data;
+}
 
 const currentDate = new Date();
 let date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 const views = ['day','week', 'workWeek','month'];
-const groups = ['salesman'];
+const groups = ['UserID'];
 
 const onAppointmentDeleting = (e) => {
   window.confirm("Are you sure you wish to delete this appointment?") &&
@@ -36,11 +45,13 @@ class SalesCalendar extends React.Component {
     super(props);
     this.state={
       groupByDate:true,
-      cancel:true
+      cancel:true,
+      userList:''
     };
     
     this.onGroupByDateChanged = this.onGroupByDateChanged.bind(this);
     this.onAppointmentForm = this.onAppointmentForm.bind(this);
+    this.salesmanSource = this.salesmanSource.bind(this);
 /*
     const [estimates, setestimates] = useState([]);
     useEffect(() => {
@@ -73,27 +84,35 @@ class SalesCalendar extends React.Component {
       groupByDate: args.value
     });
   }
+  async salesmanSource() {
+    console.log("did mount");
+    const data = await getUsers();
+    return data.data;
+  }
+  componentDidMount(){
+    this.salesmanSource().then(result=> this.setState({userList:result}));
+  }
   render() {
     return (
+      
       <div>
       <Scheduler
-        groups = {groups}
+        //groups = {groups}
         groupByDate={this.state.groupByDate}
-        timeZone="America/Los_Angeles"
         dataSource={dataSource}
         views={views}
         defaultCurrentView="workWeek"
         defaultCurrentDate={date}
         height={800}
         startDayHour={6}
-        appointmentComponent={SalesTemplate}
+        //appointmentComponent={SalesTemplate}
         //appointmentTooltipComponent={SalesTooltip}
         onAppointmentDeleting={onAppointmentDeleting}
         onAppointmentFormOpening={this.onAppointmentForm}
         >
         <Resource
-          dataSource={salesmanData}
-          fieldExpr="salesman"
+          dataSource={this.state.userList.data}
+          fieldExpr="UserID"
           >
         </Resource>
         <Resource

@@ -8,6 +8,7 @@ import Customers from "../../pages/customers";
 import Users from "../../pages/users";
 import Roles from "../../pages/roles";
 import CustomerInfo from "../../pages/customerInfo";
+import AddressInfo from "../../pages/addressInfo";
 import "./index.css";
 export default function Main() {
   return (
@@ -21,6 +22,8 @@ export default function Main() {
         <Route path="/users" component={Users} />
         <Route path="/roles" component={Roles} />
         <Route path="/customerinfo/:customer" component={CustomerInfo} />
+        <Route path="/addressinfo/:address" component={AddressInfo} />
+
         <Redirect to="/home"></Redirect>
       </Switch>
     </div>
