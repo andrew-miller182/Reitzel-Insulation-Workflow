@@ -66,3 +66,41 @@ export async function getCustomers() {
     if(region !== []) return region;
     else return 0;
   }
+  export async function getRegionAPI(){
+    var tableName = "region";
+    const region = await ajax(
+      "/fetchValues",
+      {tableName},
+      "post"
+    );
+    if(region !== []) return region;
+    else return 0;
+  }
+
+  export async function updateCustomer(id, firstName, lastName, email, phone, billing, city, postal, region){
+    var tableName = "customers";
+    var columsAndvalues = `FirstName='${firstName}',LastName='${lastName}',Phone='${phone}',Email='${email}', BillingAddress='${billing}',City='${city}',PostalCode='${postal}',Region='${region}'`;
+  var condition = `CustomerID='${id}'`;
+  const result = await ajax(
+    "/updateValues",
+    { tableName, columsAndvalues, condition },
+    "post"
+  );
+  console.log("result", result);
+  if (result !== []) return result;
+  else {
+    return 0;
+  }
+}
+
+export async function deleteCustomer(id) {
+  var tableName = "customers";
+  var columns = "*";
+  var condition = `CustomerID='${id}'`;
+  const result = await ajax("/deleteValues", { tableName, columns }, "post");
+  console.log("result", result);
+  if (result !== []) return result;
+  else {
+    return 0;
+  }
+}

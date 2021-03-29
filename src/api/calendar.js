@@ -41,12 +41,13 @@ export async function deleteEstimate(id) {
     }
   }
   export async function updateEstimate(id, values) {
+    console.log(id, values.startDate, values.endDate);
     var tableName = "estimates";
-    var columsAndvalues = `startDate='${values.startDate}',endDate='${values.endDate}`;
+    var columnsAndValues = `startDate='${values.startDate}',endDate='${values.endDate}'`;
     var condition = `EstimateID='${id}'`;
     const result = await ajax(
       "/updateValues",
-      { tableName, columsAndvalues, condition },
+      { tableName, columnsAndValues, condition },
       "post"
     );
     console.log("result", result);

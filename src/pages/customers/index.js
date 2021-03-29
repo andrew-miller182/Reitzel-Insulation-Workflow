@@ -8,6 +8,10 @@ export default function Customers() {
 const [customers, setcustomers] = useState([]);
 const [addressList, setaddresses] = useState([]);
 const [form1] = Form.useForm();
+const [formData, setFormData] = useState([]);
+const [showForm, setShowForm] = useState(false);
+const { Item } = Form;
+const { confirm } = Modal;
 
 const columns = [
   {
@@ -36,8 +40,8 @@ const columns = [
             >
            Show Customer
           </Button>
-         </div>)
-  }
+         </div>)}
+
 ];
   useEffect(() => {
     const func = async () => {
@@ -54,7 +58,8 @@ const columns = [
   }, [customers.length]);
 
   return (
-    <Table
+    <div>
+      <Table
     style={{ width: "80%", margin: "0 auto" }}
     rowKey="id"
     bordered
@@ -63,5 +68,96 @@ const columns = [
     tableLayout="auto"
     pagination={{ pageSize: 10 }}
   ></Table>
+  <Modal
+          visible={showForm}
+          title="Update Customer"
+          onOk={console.log('confirmed')}
+          onCancel={console.log('closed')}
+        >
+          <Form form={form1} labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}>
+            <Item
+              label="First Name"
+              name="firstName"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+                
+              ]}
+              
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Last Name"
+              name="lastName"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Email"
+              name="email"
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Phone"
+              name="phone"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Billing Address"
+              name="billing"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+            </Item>
+            <Item
+              label="City"
+              name="city"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Postal Code"
+              name="postal"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+              </Item>
+          </Form>
+        </Modal>
+    </div>
+    
   )
 }
