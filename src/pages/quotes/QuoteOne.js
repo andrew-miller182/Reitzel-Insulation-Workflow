@@ -80,9 +80,10 @@ function QuoteOne(props) {
             account: account,
             firm: firm,
             products: products,
-            total: total,
+            subtotal: subtotal,
             taxper: taxper,
             tax: tax,
+            total: total,
             details: details
         }
 
@@ -98,6 +99,8 @@ function QuoteOne(props) {
         evt.preventDefault();
     }
 
+    const [manualcalc, setManualcalc] = useState(false)
+    const [subtotal, setSubtotal] = useState(0)
     const [total, setTotal] = useState(0)
     const [taxper, setTaxper] = useState(13)
     const [tax, setTax] = useState(0)
@@ -107,6 +110,12 @@ function QuoteOne(props) {
         values.preventDefault();
     }
 
+    const handleManualcalc = (e) => {
+        if(!manualcalc)
+            setManualcalc(true)
+        else
+            setManualcalc(false)
+    }
 
     const changeProductName = (i, e) => {
         var temp = products
@@ -124,38 +133,15 @@ function QuoteOne(props) {
 
         var temp = products
         temp[i]["price"] = e.target.value
+        
         setProducts(temp)
-        // var calTotal = 0
-        // console.log(products)
-        // products.map(product => {
-        //     // console.log(product["price"])
-        //     calTotal += parseFloat(product["price"])
-        // })
-        // // console.log(products)
-        // console.log(parseFloat(calTotal).toFixed(2))
-        // var taxc = ((total * taxper)/100);
-        // calTotal += taxc;
-        // setTotal(parseFloat(calTotal).toFixed(2))
-        // setTax(parseFloat(taxc).toFixed(2))
         totalCalc();
     }
 
     const changeTaxper = (e) => {
         var temp = e.target.value;
-        totalCalc();
         setTaxper(temp)
-    }
-
-    const totalCalc = () => {
-        var temp = products
-        var calTotal = 0;
-        products.map(product => {
-            calTotal += parseFloat(product["price"])
-        })
-        var taxc = ((total * taxper)/100);
-        calTotal += taxc;
-        setTotal(parseFloat(calTotal).toFixed(2))
-        setTax(parseFloat(taxc).toFixed(2))
+        totalCalc();
     }
 
     const changeTax = (e) => {
@@ -164,11 +150,34 @@ function QuoteOne(props) {
     }
 
 
+    const changeSubtotal = (e) => {
+        var temp = e.target.value;
+        setSubtotal(temp)
+    }
+    
     const changeTotal = (e) => {
         var temp = e.target.value;
         setTotal(temp)
     }
 
+    const totalCalc = () => {
+        var temp = products
+        var calSubtotal = 0.00;
+        var calTotal = 0.00;
+        // products.map(product => {
+        //     calTotal += parseFloat(product["price"])
+        // })
+        temp.forEach((p) => {
+            calSubtotal = (calSubtotal + parseFloat(p["price"]));
+        })
+        setSubtotal(parseFloat(calSubtotal).toFixed(2));
+        var taxc = ((calSubtotal * taxper)/100);
+        setTax(parseFloat(taxc).toFixed(2))
+        console.log(calSubtotal);
+        calTotal = (parseFloat(calSubtotal) + parseFloat(taxc));
+        console.log(calTotal);
+        setTotal(parseFloat(calTotal).toFixed(2))
+    }
 
     const renderRows = (prod) => {
         let rows = []
@@ -194,7 +203,8 @@ function QuoteOne(props) {
                            }}/>
                 </td>
                 <td>
-                    <input type="number" name={`product[${productCounter}][price]`} placeholder="0.00"
+                    <input type="number" name={`product[${productCounter}][price]`} placeholder="0.00" 
+                           defaultValue={`product[${productCounter}][price]`}
                            className="ant-input"
                            onChange={(e) => {
                                handlePriceChange(i, e)
@@ -357,8 +367,17 @@ function QuoteOne(props) {
                                 </td>
                             </tr>
                             <tr>
-                                <td colSpan="2">Tax %: ---------------------------------------------</td>
-                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01"
+                                <td colSpan="2" style={{ textAlign : "right"}}>Sub Total : </td>
+                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
+                               placeholder="Quote Total" value={subtotal} 
+                               onChange={(e) => {
+                                changeSubtotal(e)
+                                }}
+                               /></td>
+                            </tr>
+                            <tr>
+                                <td colSpan="2" style={{ textAlign : "right"}}>Tax % : </td>
+                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
                                placeholder="Quote Tax %" value={taxper} 
                                onChange={(e) => {
                                 changeTaxper(e)
@@ -366,8 +385,8 @@ function QuoteOne(props) {
                                /></td>
                             </tr>
                             <tr>
-                                <td colSpan="2">Tax Calc: ------------------------------------------</td>
-                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01"
+                                <td colSpan="2" style={{ textAlign : "right"}}>Tax Calc : </td>
+                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
                                placeholder="Quote Tax $" value={tax} 
                                onChange={(e) => {
                                 changeTax(e)
@@ -375,12 +394,19 @@ function QuoteOne(props) {
                                /></td>
                             </tr>
                             <tr>
-                                <td colSpan="2">Total: ---------------------------------------------</td>
-                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01"
+                                <td colSpan="2" style={{ textAlign : "right"}}>Total : </td>
+                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
                                placeholder="Quote Total" value={total} 
                                onChange={(e) => {
                                 changeTotal(e)
                                 }}
+                               /></td>
+                            </tr>
+                            <tr>
+                                <td colSpan="2" style={{ textAlign : "left"}}>Overried : </td>
+                                <td><input  className="ant-input ant-checkbox" name="manual" type="checkbox" defaultChecked={manualcalc} 
+                               onChange={(e) => { handleManualcalc(e)
+                               }}
                                /></td>
                             </tr>
                             </tfoot>

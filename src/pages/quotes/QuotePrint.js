@@ -71,6 +71,11 @@ function QuotePrint(props) {
 								</tbody>
                                 <tfoot>
                                     <tr style={{ borderTop: "2px solid black" }}>
+									<td></td>
+										<td>Subtotal ($)</td>
+										<td style={{ textAlign: "right" }}>{quoteFormData.subtotal} </td>
+									</tr>
+                                    <tr>
 										<td></td>
 										<td>Tax %</td>
 										<td style={{ textAlign: "right" }}>{quoteFormData.taxper} </td>
