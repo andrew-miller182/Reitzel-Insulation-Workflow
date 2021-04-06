@@ -1,5 +1,5 @@
 import ajax from "./base";
-
+import base from "./base"
 export async function addOrder(order) {
   var tableName = "customers";
   var region = parseInt(order.Region);

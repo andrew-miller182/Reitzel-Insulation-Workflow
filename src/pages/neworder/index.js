@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Input, Button, Select, message } from "antd";
 import { addOrder } from "../../api/neworder";
 import "./index.css";
+const id=0;
 const { Item } = Form;
 const { Option } = Select;
 export default function NewOrders(props) {

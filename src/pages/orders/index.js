@@ -4,6 +4,7 @@ import { Input, Table, Form, Modal, Card, Select, Button } from "antd";
 import "./index.css";
 const { Item } = Form;
 const { Option } = Select;
+const id = 0;
 export default function Orders() {
   const [form] = Form.useForm();
   //form ref to control the adding form
