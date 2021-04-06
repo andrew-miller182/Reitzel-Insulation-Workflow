@@ -11,6 +11,7 @@ import CustomerInfo from "../../pages/customerInfo";
 import AddressInfo from "../../pages/addressInfo";
 import NewOrders from "../../pages/neworder";
 import "./index.css";
+const id=0;
 export default function Main() {
   return (
     <div className="content-main">
