@@ -6,7 +6,7 @@ import Scheduler, {Resource} from 'devextreme-react/scheduler';
 import SalesTemplate from './SalesTemplate.js'
 import SalesTooltip from './salesTooltip.js';
 import { regionColor} from './salesData';
-import {getEstimates, deleteEstimate, getUsers, updateEstimate} from '../../../api/calendar';
+import {getEstimates, deleteEstimate, getUsers, updateEstimate, getRegionAPI} from '../../../api/calendar';
 import CustomStore from 'devextreme/data/custom_store';
 
 const dataSource = new CustomStore({
@@ -32,6 +32,11 @@ const currentDate = new Date();
 let date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 const views = ['day','week', 'workWeek','month'];
 const groups = ['UserID'];
+const renderResourceCell = (model) => {
+  return (
+      <i>{model.data.FirstName}</i>
+  );
+}
 
 //const onAppointmentDeleting = (e) => {
 //  window.confirm("Are you sure you wish to delete this appointment?") &&
@@ -44,14 +49,24 @@ class SalesCalendar extends React.Component {
     this.state={
       groupByDate:true,
       cancel:true,
-      userList:[{},{}]
+      userList:"",
+      regionList:"",
+      info:false
     };
     
     this.onGroupByDateChanged = this.onGroupByDateChanged.bind(this);
     this.onAppointmentForm = this.onAppointmentForm.bind(this);
     this.salesmanSource = this.salesmanSource.bind(this);
+    this.regionSource = this.regionSource.bind(this);
+    this.InfoIsHere = this.InfoIsHere.bind(this);
   }
-  
+  async InfoIsHere() {
+  let regionData = await this.regionSource();
+  let userData = await this.salesmanSource();
+  this.setState({userList:userData});
+  this.setState({regionList:regionData});
+  this.setState({info:true});
+} 
   
   onAppointmentForm(args) {
     args.cancel = true;
@@ -61,24 +76,40 @@ class SalesCalendar extends React.Component {
       groupByDate: args.value
     });
   }
+  async regionSource() {
+    const data = await getRegionAPI();
+    console.log(data.data);
+    return data.data;
+  }
+
   async salesmanSource() {
-    console.log("did mount");
     const data = await getUsers();
+    console.log(data.data);
     return data.data;
   }
   componentDidMount(){
-    this.salesmanSource().then(result=>
-      this.setState({userList:result}
-    ));
-  }
-  
+    this.InfoIsHere();
+}
+ 
+
+
   render() {
+    if (this.state.info == false){
+        return (
+          <p>Loading information...</p>
+        )
+      }
+      else{
+
+      
     return (
+      
       <div>
       <Scheduler
         timeZone="America/Toronto"
         groups = {groups}
         groupByDate={this.state.groupByDate}
+        resourceCellRender={renderResourceCell}
         dataSource={dataSource}
         views={views}
         defaultCurrentView="workWeek"
@@ -96,8 +127,8 @@ class SalesCalendar extends React.Component {
           >
         </Resource>
         <Resource
-          dataSource={regionColor}
-          fieldExpr="region"
+          dataSource={this.state.regionList}
+          fieldExpr="RegionID"
           useColorAsDefault={true}
         ></Resource>
         </Scheduler>
@@ -114,6 +145,6 @@ class SalesCalendar extends React.Component {
     );
   }
 }
-
+}
 
 export default SalesCalendar;

@@ -79,11 +79,11 @@ export async function getCustomers() {
 
   export async function updateCustomer(id, firstName, lastName, email, phone, billing, city, postal, region){
     var tableName = "customers";
-    var columsAndvalues = `FirstName='${firstName}',LastName='${lastName}',Phone='${phone}',Email='${email}', BillingAddress='${billing}',City='${city}',PostalCode='${postal}',Region='${region}'`;
-  var condition = `CustomerID='${id}'`;
+    var columnsAndValues = `FirstName='${firstName}',LastName='${lastName}',Phone='${phone}',Email='${email}', BillingAddress='${billing}',City='${city}',PostalCode='${postal}',Region='${region}'`;
+  var condition = `CustomerID=${id}`;
   const result = await ajax(
     "/updateValues",
-    { tableName, columsAndvalues, condition },
+    { tableName, columnsAndValues, condition },
     "post"
   );
   console.log("result", result);
@@ -97,7 +97,7 @@ export async function deleteCustomer(id) {
   var tableName = "customers";
   var columns = "*";
   var condition = `CustomerID='${id}'`;
-  const result = await ajax("/deleteValues", { tableName, columns }, "post");
+  const result = await ajax("/deleteValues", { tableName, columns, condition }, "post");
   console.log("result", result);
   if (result !== []) return result;
   else {

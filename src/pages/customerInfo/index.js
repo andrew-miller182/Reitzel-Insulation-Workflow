@@ -1,7 +1,8 @@
 import React, {useEffect, setState, useState} from 'react';
-import { Card, Table, Button, Modal, Form, Input, message, Select } from "antd";
+import { Card, Table, Button, Modal, Form, Input, message, Select, Space } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import {getRegion, updateCustomer, getRegionAPI, getCustomer, getCustomerAddresses, deleteCustomer} from '../../api/customer';
-import { useRouteMatch } from "react-router-dom";
+import { Redirect, useRouteMatch } from "react-router-dom";
  const { Item } = Form;
 const { confirm } = Modal;
 const { Option } = Select;
@@ -35,7 +36,6 @@ export default function CustomerInfo() {
           
         };
         func();
-        //getRegionName();
         getAddressList();
           getRegions();
         
@@ -57,25 +57,29 @@ export default function CustomerInfo() {
       const getRegions = async() =>{
         var result = await getRegionAPI();
         var regionList = result.data.map((item) =>({
+          id:item.RegionID,
           name:item.Region
         }));
         setRegions(regionList);
       }
       const title = (
         <div>
+          <Space>
+
+          
           <Button
             type="primary"
           onClick={() => {
               setShowForm(true);
               form1.setFieldsValue({
                 firstName: customerInfo.firstName,
-              lastName: '',
-              email: '',
-              phone: '',
-              billing: '',
-             city: '',
-              postal: '',
-              region: ''
+              lastName: customerInfo.lastName,
+              email: customerInfo.email,
+              phone: customerInfo.phone,
+              billing: customerInfo.billing,
+             city: customerInfo.city,
+              postal: customerInfo.postal,
+              region: customerInfo.region
              });
             }}
           >
@@ -84,28 +88,50 @@ export default function CustomerInfo() {
           <Button
             type="primary"
             onClick={() => {
-              deleteCustomer(customerInfo.id)
+              handleDeleteCustomer(customerInfo.id);
             }}
           >
             Delete
           </Button>
+          </Space>
         </div>
       )
       const handleUpdate = async () => {
         const validResult = await form1.validateFields();
         if (validResult.errorFields && validResult.errorFields.length > 0) return;
         const value = form1.getFieldsValue();
-        const { firstName, lastName, email, phone, billing, city, postal, region } = value;
+        console.log(value);
+        //const { firstName, lastName, email, phone, billing, city, postal, region } = value;
         const id = customerInfo.id;
         console.log("id", id);
         //update data in the backend
-        const result = await updateCustomer(id, firstName, lastName, email, phone, billing, city, postal, region);
+        const result = await updateCustomer(id, value.firstName, value.lastName, value.email, value.phone, value.billing, value.city, value.postal, value.region);
         setShowForm(false);
         console.log(result);
-        if (result.data.status === 1) {
-          message.success("success!");
+        if (result.status === 200) {
+          message.success("Successfully updated customer information");
         }
       };
+      const handleDeleteCustomer = async (id) => {
+        confirm({
+          title: "Are you sure you want to delete this customer?",
+          icon: <ExclamationCircleOutlined />,
+          content: "",
+          okText: "Yes",
+          okType: "danger",
+          cancelText: "No",
+          onOk() {
+            return new Promise((resolve, reject) => {
+              const result = deleteCustomer(id);
+              if (result.status === 200) message.success("Customer has been successfully deleted");
+              <Redirect to="/customers" ></Redirect>
+            });
+          },
+          onCancel() {
+            console.log("Cancel");
+          },
+        });
+      }
     const columns =[
       {
         title:"Address",
@@ -177,8 +203,8 @@ export default function CustomerInfo() {
         <Modal
           visible={showForm}
           title="Update Customer"
-          onOk={console.log("confirmed")}
-          onCancel={console.log("closed")}
+          onOk={handleUpdate}
+          onCancel={() => setShowForm(false)}
         >
           <Form form={form1} labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}>
             <Item
@@ -271,7 +297,7 @@ export default function CustomerInfo() {
                 },
               ]}
             >
-              //<Select>{options}</Select>
+              <Select>{options}</Select>
             </Item>
           </Form>
         </Modal>

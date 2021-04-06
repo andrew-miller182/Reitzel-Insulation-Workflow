@@ -56,3 +56,25 @@ export async function deleteEstimate(id) {
       return 0;
     }
   }
+
+  export async function getRegion(id){
+    var tableName = "region";
+    var condition = `RegionID = '${id}'`
+    const region = await ajax(
+      "/fetchValues",
+      {tableName, condition},
+      "post"
+    );
+    if(region !== []) return region;
+    else return 0;
+  }
+  export async function getRegionAPI(){
+    var tableName = "region";
+    const region = await ajax(
+      "/fetchValues",
+      {tableName},
+      "post"
+    );
+    if(region !== []) return region;
+    else return 0;
+  }
