@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 31, 2021 at 10:54 PM
+-- Generation Time: Apr 06, 2021 at 03:52 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.1
 
@@ -156,6 +156,19 @@ CREATE TABLE `photos` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `quotedetails`
+--
+
+CREATE TABLE `quotedetails` (
+  `QuoteDetailID` int(11) NOT NULL,
+  `QuoteID` int(11) NOT NULL,
+  `QuoteDetails` varchar(600) NOT NULL,
+  `DetailsSubtotal` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `quotelines`
 --
 
@@ -188,23 +201,21 @@ CREATE TABLE `quotes` (
   `AddressID` int(11) NOT NULL,
   `CustomerID` int(11) NOT NULL,
   `UserID` int(11) NOT NULL,
-  `EstimateID` int(11) NOT NULL,
-  `QuoteInfo` varchar(600) NOT NULL,
-  `QuoteTotal` double NOT NULL,
   `notesCustomers` varchar(600) NOT NULL,
   `notesInstallers` varchar(600) NOT NULL,
   `creationDate` date NOT NULL,
   `startDate` datetime NOT NULL,
-  `endDate` datetime NOT NULL
+  `endDate` datetime NOT NULL,
+  `active` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `quotes`
 --
 
-INSERT INTO `quotes` (`QuoteID`, `AddressID`, `CustomerID`, `UserID`, `EstimateID`, `QuoteInfo`, `QuoteTotal`, `notesCustomers`, `notesInstallers`, `creationDate`, `startDate`, `endDate`) VALUES
-(1, 1, 2, 2, 2, 'We will supply and install “Insulthane Extreme, 2 lb medium density, closed cell, polyurethane spray foam thermal insulation. CCMC # 13697-L” (Default) (Option - “Wrapsulate 1100, 1 lb low density, open cell, polyurethane spray foam thermal insulation. CCMC# 14049-R”)', 200, 'Please be aware that manufacturer requests house be unoccupied for up to 24 hours after the application and should be covered in living space with a thermal barrier i.e. Drywall or fireproof coating. ', 'Bring all the tools', '2021-03-02', '2021-03-02 13:00:00', '2021-03-02 14:00:00'),
-(2, 2, 2, 1, 1, 'We will supply and install Thermocomfort vermin resistant blown cellulose insulation to the wall cavities. CCMC # 08774-L. This process includes drilling 2-3, 2 inch holes per cavity and filling with cellulose. Reitzel Insulation is responsible to plug and patch the holes with the first layer of sheetrock 90. Reitzel Insulation cannot be held liable for poor wall make-up. The customer is responsible to refinish the wall as they see fixed.', 350, 'All tools, debris and personal belongings need to be moved at least 6 feet away from the application area to allow our crew to complete their work. All pictures and wall hangings need to be removed prior to the arrival of our crew.', 'Have a good time', '2021-03-02', '2021-03-02 15:57:08', '2021-03-02 16:57:08');
+INSERT INTO `quotes` (`QuoteID`, `AddressID`, `CustomerID`, `UserID`, `notesCustomers`, `notesInstallers`, `creationDate`, `startDate`, `endDate`, `active`) VALUES
+(1, 1, 2, 2, 'Please be aware that manufacturer requests house be unoccupied for up to 24 hours after the application and should be covered in living space with a thermal barrier i.e. Drywall or fireproof coating. ', 'Bring all the tools', '2021-03-02', '2021-03-02 13:00:00', '2021-03-02 14:00:00', 'yes'),
+(2, 2, 2, 1, 'All tools, debris and personal belongings need to be moved at least 6 feet away from the application area to allow our crew to complete their work. All pictures and wall hangings need to be removed prior to the arrival of our crew.', 'Have a good time', '2021-03-02', '2021-03-02 15:57:08', '2021-03-02 16:57:08', 'yes');
 
 -- --------------------------------------------------------
 
@@ -232,19 +243,6 @@ INSERT INTO `region` (`RegionID`, `Region`, `Color`) VALUES
 (7, 'Greater Toronto area', '#00065e'),
 (8, 'Kitchener - Waterloo', '#ff852e'),
 (9, 'Brantford, Paris, Burford, Waterford, Brant Country, Haldmald, Caledonia', '#6b0000');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `subtotallines`
---
-
-CREATE TABLE `subtotallines` (
-  `subtotalID` int(11) NOT NULL,
-  `invoiceID` int(11) NOT NULL,
-  `subtotalNotes` varchar(600) NOT NULL,
-  `subtotalAmount` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -361,6 +359,13 @@ ALTER TABLE `photos`
   ADD KEY `WorkID` (`WorkID`);
 
 --
+-- Indexes for table `quotedetails`
+--
+ALTER TABLE `quotedetails`
+  ADD PRIMARY KEY (`QuoteDetailID`),
+  ADD KEY `QuoteID_FK_2` (`QuoteID`);
+
+--
 -- Indexes for table `quotelines`
 --
 ALTER TABLE `quotelines`
@@ -374,7 +379,6 @@ ALTER TABLE `quotes`
   ADD PRIMARY KEY (`QuoteID`),
   ADD KEY `AddressID_FK_4` (`AddressID`),
   ADD KEY `CustomerID_FK_3` (`CustomerID`),
-  ADD KEY `EstimateID_FK` (`EstimateID`),
   ADD KEY `UserID_FK_3` (`UserID`);
 
 --
@@ -382,13 +386,6 @@ ALTER TABLE `quotes`
 --
 ALTER TABLE `region`
   ADD PRIMARY KEY (`RegionID`);
-
---
--- Indexes for table `subtotallines`
---
-ALTER TABLE `subtotallines`
-  ADD PRIMARY KEY (`subtotalID`),
-  ADD KEY `InvoiceID_FK` (`invoiceID`);
 
 --
 -- Indexes for table `users`
@@ -455,6 +452,12 @@ ALTER TABLE `photos`
   MODIFY `PhotoID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `quotedetails`
+--
+ALTER TABLE `quotedetails`
+  MODIFY `QuoteDetailID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `quotelines`
 --
 ALTER TABLE `quotelines`
@@ -471,12 +474,6 @@ ALTER TABLE `quotes`
 --
 ALTER TABLE `region`
   MODIFY `RegionID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT for table `subtotallines`
---
-ALTER TABLE `subtotallines`
-  MODIFY `subtotalID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -539,6 +536,12 @@ ALTER TABLE `photos`
   ADD CONSTRAINT `WorkID_FK_3` FOREIGN KEY (`WorkID`) REFERENCES `workorders` (`WorkID`);
 
 --
+-- Constraints for table `quotedetails`
+--
+ALTER TABLE `quotedetails`
+  ADD CONSTRAINT `QuoteID_FK_2` FOREIGN KEY (`QuoteID`) REFERENCES `quotes` (`QuoteID`);
+
+--
 -- Constraints for table `quotelines`
 --
 ALTER TABLE `quotelines`
@@ -550,14 +553,7 @@ ALTER TABLE `quotelines`
 ALTER TABLE `quotes`
   ADD CONSTRAINT `AddressID_FK_4` FOREIGN KEY (`AddressID`) REFERENCES `address` (`AddressID`),
   ADD CONSTRAINT `CustomerID_FK_3` FOREIGN KEY (`CustomerID`) REFERENCES `customers` (`CustomerID`),
-  ADD CONSTRAINT `EstimateID_FK` FOREIGN KEY (`EstimateID`) REFERENCES `estimates` (`EstimateID`),
   ADD CONSTRAINT `UserID_FK_3` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`);
-
---
--- Constraints for table `subtotallines`
---
-ALTER TABLE `subtotallines`
-  ADD CONSTRAINT `InvoiceID_FK` FOREIGN KEY (`invoiceID`) REFERENCES `invoices` (`InvoiceID`);
 
 --
 -- Constraints for table `worklines`
