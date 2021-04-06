@@ -1,44 +1,46 @@
 import React, { useState, useEffect, Link } from "react";
 import { Card, Table, Button, Modal, Form, Input, message, Select } from "antd";
-import {getCustomers, getAddresses} from '../../api/customer';
-import './index.css';
+import { getCustomers, getAddresses } from "../../api/customer";
+import "./index.css";
 
 export default function Customers() {
+  const [customers, setcustomers] = useState([]);
+  const [addressList, setaddresses] = useState([]);
+  const [form1] = Form.useForm();
 
-const [customers, setcustomers] = useState([]);
-const [addressList, setaddresses] = useState([]);
-const [form1] = Form.useForm();
-
-const columns = [
-  {
-    title:"First Name",
-    dataIndex:"firstName",
-    key:"FirstName"
-  },
-  {
-    title:"Last Name",
-    dataIndex:"lastName",
-    key:"LastName"
-  },
-  {
-    title:"Customer Billing Address",
-    dataIndex:"billing",
-    key:"BillingAddress"
-  },
-  {
-    title:"See Customer Page",
-    key:"OpenCustomer",
-    render: (data) => ( 
-    <div className="operate-button">
+  const columns = [
+    {
+      title: "First Name",
+      dataIndex: "firstName",
+      key: "FirstName",
+    },
+    {
+      title: "Last Name",
+      dataIndex: "lastName",
+      key: "LastName",
+    },
+    {
+      title: "Customer Billing Address",
+      dataIndex: "billing",
+      key: "BillingAddress",
+    },
+    {
+      title: "See Customer Page",
+      key: "OpenCustomer",
+      render: (data) => (
+        <div className="operate-button">
           <Button
-          type="link"
-          href={`/customerinfo/${data.id}`}
-            >
-           Show Customer
+            type="link"
+            onClick={() => {
+              this.props.history.push(`/customerinfo/${data.id}`);
+            }}
+          >
+            Show Customer
           </Button>
-         </div>)
-  }
-];
+        </div>
+      ),
+    },
+  ];
   useEffect(() => {
     const func = async () => {
       var result = await getCustomers();
@@ -46,7 +48,7 @@ const columns = [
         id: item.CustomerID,
         firstName: item.FirstName,
         lastName: item.LastName,
-        billing: item.BillingAddress
+        billing: item.BillingAddress,
       }));
       setcustomers(tables);
     };
@@ -55,13 +57,13 @@ const columns = [
 
   return (
     <Table
-    style={{ width: "80%", margin: "0 auto" }}
-    rowKey="id"
-    bordered
-    dataSource={customers}
-    columns={columns}
-    tableLayout="auto"
-    pagination={{ pageSize: 10 }}
-  ></Table>
-  )
+      style={{ width: "80%", margin: "0 auto" }}
+      rowKey="id"
+      bordered
+      dataSource={customers}
+      columns={columns}
+      tableLayout="auto"
+      pagination={{ pageSize: 10 }}
+    ></Table>
+  );
 }

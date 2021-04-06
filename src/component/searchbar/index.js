@@ -1,17 +1,28 @@
 import React, { useState } from "react";
-import { Input, Radio, message } from "antd";
-
+import { Input, Radio, Form, message, Modal, Button } from "antd";
+import Orders from "../../pages/orders";
 import "./index.css";
+import { withRouter } from "react-router";
 
 const { Search } = Input;
-export default function Searchbar() {
+function Searchbar(props) {
   const [value, setValue] = useState("");
+  const [newOrderShow, setNewOrderShow] = useState(false);
   const handleChange = (e) => {
     setValue(e.target.value);
+    if (e.target.value == "order") {
+      props.history.push("/neworders");
+    }
   };
   const onSearch = (value) => {
     message.success(value);
   };
+  // const handleOk = () => {
+  //   setNewOrderShow(false);
+  // };
+  // const handleCancel = () => {
+  //   setNewOrderShow(false);
+  // };
   const options = [
     { label: "New Order", value: "order" },
     { label: "New Customer", value: "customer" },
@@ -32,6 +43,15 @@ export default function Searchbar() {
         optionType="button"
         buttonStyle="solid"
       ></Radio.Group>
+      {/* <Modal
+        visible={newOrderShow}
+        title="Add New Order"
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Orders />
+      </Modal> */}
     </div>
   );
 }
+export default withRouter(Searchbar);

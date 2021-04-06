@@ -9,6 +9,7 @@ import Users from "../../pages/users";
 import Roles from "../../pages/roles";
 import CustomerInfo from "../../pages/customerInfo";
 import AddressInfo from "../../pages/addressInfo";
+import NewOrders from "../../pages/neworder";
 import "./index.css";
 export default function Main() {
   return (
@@ -23,7 +24,7 @@ export default function Main() {
         <Route path="/roles" component={Roles} />
         <Route path="/customerinfo/:customer" component={CustomerInfo} />
         <Route path="/addressinfo/:address" component={AddressInfo} />
-
+        <Route path="/neworders" component={NewOrders} />
         <Redirect to="/home"></Redirect>
       </Switch>
     </div>
