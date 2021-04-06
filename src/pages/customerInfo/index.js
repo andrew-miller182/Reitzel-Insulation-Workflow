@@ -1,15 +1,23 @@
 import React, {useEffect, setState, useState} from 'react';
-import { Card, Table, Button, Modal, Form, Input, message, Select } from "antd";
-import {getRegion, getAddresses, getCustomer, getCustomerAddresses} from '../../api/customer';
-import { useRouteMatch } from "react-router-dom";
-import Tab from '../../Components/HomeTemplate/Tab';
+import { Card, Table, Button, Modal, Form, Input, message, Select, Space } from "antd";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import {getRegion, updateCustomer, getRegionAPI, getCustomer, getCustomerAddresses, deleteCustomer} from '../../api/customer';
+import { Redirect, useRouteMatch } from "react-router-dom";
+ const { Item } = Form;
+const { confirm } = Modal;
+const { Option } = Select;
 
 export default function CustomerInfo() {
- 
+
   let match = useRouteMatch('/customerinfo/:customer').params.customer;
+  const [showForm, setShowForm] = useState(false);
+  const [form1] = Form.useForm();
+  const [regions, setRegions] = useState([]);
   const [customerInfo, setcustomerinfo] = useState([]);
-  const [regionName, setRegionName] = useState([]);
   const [addressList, setAddressList] = useState([]);
+  const options = regions.map((item) => (
+    <Option key={item.id}>{item.name}</Option>
+  ));
     useEffect(() => {
         const func = async () => {
           var result = await getCustomer(match);
@@ -25,19 +33,14 @@ export default function CustomerInfo() {
             region: item.Region
           }));
           setcustomerinfo(customerInfo[0]);
+          
         };
         func();
-        getRegionName();
         getAddressList();
-      }, [customerInfo.length]);
+          getRegions();
+        
+      }, []);
 
-    const getRegionName = async () => {
-      var result = await getRegion(customerInfo.region);
-      var name = result.data.map((item) =>({
-        name: item.Region
-      }))
-      setRegionName(name[0]);
-    }
     const getAddressList = async () => {
         var result = await getCustomerAddresses(match);
         var addresses = result.data.map((item) =>({
@@ -51,6 +54,84 @@ export default function CustomerInfo() {
         setAddressList(addresses);
         console.log(addresses);
       };
+      const getRegions = async() =>{
+        var result = await getRegionAPI();
+        var regionList = result.data.map((item) =>({
+          id:item.RegionID,
+          name:item.Region
+        }));
+        setRegions(regionList);
+      }
+      const title = (
+        <div>
+          <Space>
+
+          
+          <Button
+            type="primary"
+          onClick={() => {
+              setShowForm(true);
+              form1.setFieldsValue({
+                firstName: customerInfo.firstName,
+              lastName: customerInfo.lastName,
+              email: customerInfo.email,
+              phone: customerInfo.phone,
+              billing: customerInfo.billing,
+             city: customerInfo.city,
+              postal: customerInfo.postal,
+              region: customerInfo.region
+             });
+            }}
+          >
+            Modify
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              handleDeleteCustomer(customerInfo.id);
+            }}
+          >
+            Delete
+          </Button>
+          </Space>
+        </div>
+      )
+      const handleUpdate = async () => {
+        const validResult = await form1.validateFields();
+        if (validResult.errorFields && validResult.errorFields.length > 0) return;
+        const value = form1.getFieldsValue();
+        console.log(value);
+        //const { firstName, lastName, email, phone, billing, city, postal, region } = value;
+        const id = customerInfo.id;
+        console.log("id", id);
+        //update data in the backend
+        const result = await updateCustomer(id, value.firstName, value.lastName, value.email, value.phone, value.billing, value.city, value.postal, value.region);
+        setShowForm(false);
+        console.log(result);
+        if (result.status === 200) {
+          message.success("Successfully updated customer information");
+        }
+      };
+      const handleDeleteCustomer = async (id) => {
+        confirm({
+          title: "Are you sure you want to delete this customer?",
+          icon: <ExclamationCircleOutlined />,
+          content: "",
+          okText: "Yes",
+          okType: "danger",
+          cancelText: "No",
+          onOk() {
+            return new Promise((resolve, reject) => {
+              const result = deleteCustomer(id);
+              if (result.status === 200) message.success("Customer has been successfully deleted");
+              <Redirect to="/customers" ></Redirect>
+            });
+          },
+          onCancel() {
+            console.log("Cancel");
+          },
+        });
+      }
     const columns =[
       {
         title:"Address",
@@ -90,21 +171,25 @@ export default function CustomerInfo() {
           </Button>
          </div>)
       }   
-
     ]
       return(
         <div>
+          <Card
+          title = {title}
+          >
         <Card title="Customer Information">
             <p>First Name: {customerInfo.firstName}</p>
             <p>Last Name: {customerInfo.lastName}</p>
             <p>Email: {customerInfo.email}</p>
             <p>Phone: {customerInfo.phone}</p>
-            <br />
-            <p>Billing Address: {customerInfo.billing}</p>
+            <br />      
+        </Card>
+        <Card title="Billing Address">
+          <p>Billing Address: {customerInfo.billing}</p>
             <p>City: {customerInfo.city}</p>
             <p>Postal Code: {customerInfo.postal}</p>
-            
         </Card>
+            
         <Table
         style={{ width: "80%", margin: "0 auto" }}
         rowKey="id"
@@ -115,6 +200,108 @@ export default function CustomerInfo() {
         pagination={{ pageSize: 10 }}>
 
           </Table>
+        <Modal
+          visible={showForm}
+          title="Update Customer"
+          onOk={handleUpdate}
+          onCancel={() => setShowForm(false)}
+        >
+          <Form form={form1} labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}>
+            <Item
+              label="First Name"
+              name="firstName"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+                
+              ]}
+              
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Last Name"
+              name="lastName"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Email"
+              name="email"
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Phone"
+              name="phone"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Billing Address"
+              name="billing"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+            </Item>
+            <Item
+              label="City"
+              name="city"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+            </Item>
+            <Item
+              label="Postal Code"
+              name="postal"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Input />
+              </Item>
+              <Item
+              label="Region"
+              name="region"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Select>{options}</Select>
+            </Item>
+          </Form>
+        </Modal>
+        </Card>
         </div>
       )
     }

@@ -11,7 +11,6 @@
     "devextreme": "^20.2.4",
     "devextreme-aspnet-data-nojquery": "^2.8.2",
     "devextreme-react": "^20.2.3",
-    "globalize-webpack-plugin": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
@@ -52,6 +51,7 @@
   "devDependencies": {
     "devextreme-cldr-data": "^1.0.3",
     "devextreme-themebuilder": "^20.2.4",
-    "globalize": "^1.6.0"
+    "globalize": "^1.6.0",
+    "globalize-webpack-plugin": "^3.0.0"
   }
 }

@@ -25,9 +25,9 @@ function Searchbar(props) {
   //   setNewOrderShow(false);
   // };
   const options = [
-    { label: "New Order", value: "order" },
     { label: "New Customer", value: "customer" },
   ];
+
   return (
     <div className="content-searchbar">
       <Search

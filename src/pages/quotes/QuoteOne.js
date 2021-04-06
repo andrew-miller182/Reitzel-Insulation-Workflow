@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import {useDispatch} from "react-redux";
 import CustomSelect from "../../component/quotes/CustomSelect";
 import axios from "axios";
+import Header from './header';
 
 function QuoteOne(props) {
 
@@ -90,7 +91,8 @@ function QuoteOne(props) {
     
     const handleSubmit = (evt) => {
 
-        var payload = {
+        var payload = 
+        {
             first_name: firstName,
             last_name: lastName,
             billing_address: billingAddress,
@@ -229,7 +231,9 @@ function QuoteOne(props) {
 
 
         return (
+         
             <div className="Quote">
+                   <Header />
                 <h2> {props.quotename}</h2>
                 <p>
                     Attention: {data.first_name} {data.last_name}
