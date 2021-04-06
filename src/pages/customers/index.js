@@ -31,9 +31,7 @@ export default function Customers() {
         <div className="operate-button">
           <Button
             type="link"
-            onClick={() => {
-              this.props.history.push(`/customerinfo/${data.id}`);
-            }}
+            href={`/customerinfo/${data.id}`}
           >
             Show Customer
           </Button>
