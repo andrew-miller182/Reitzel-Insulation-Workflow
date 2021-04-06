@@ -12,7 +12,7 @@ function CustomSelect(props) {
 	}
 
 	let options = data.map((d) => (
-		<option key={d.id} value={d.id} data={d} selected={(d.id == quoteDataId )?true:false} >
+		<option key={d.id} value={d.id} data={d} >
 			{d.name}
 		</option>
 	));

@@ -4,6 +4,7 @@ import Button from "../../component/quotes/Button";
 import {useInput} from '../../hooks/input-hook';
 import {useSelector, useDispatch} from "react-redux";
 import CustomSelect from "../../component/quotes/CustomSelect";
+import { useParams } from "react-router";
 import qData from './quoteData.js';
 
 
@@ -19,9 +20,23 @@ function printQuote(){
 
 function QuotePrint(props) {
 
+	let { qid } = useParams();
+
     let history = useHistory();
 
-    const [quoteData, setQuoteData] = useState(props.quoteData);
+	let  quotes = qData.quote_data;
+    let selectedQuote  = (parseInt(qid)) ? quotes.find((d) => { return parseInt(d.id) == parseInt(qid) }): {};
+    
+    if(Object.keys(selectedQuote).length == 0){
+        history.push(`/quotes`);
+    }
+
+    const [quoteData, setQuoteData] = useState({});
+
+	useEffect(() => {
+        setQuoteData(selectedQuote);
+    },[selectedQuote]);
+
     const [quoteFormData, setQuoteFormData] = useState(props.quoteFormData);
 
     
@@ -48,46 +63,53 @@ function QuotePrint(props) {
 					<p>{quoteFormData.details}</p>
 					<p>
 						{quoteFormData.products.length > 0 && (
-							<table>
+							<table width="100%" border="1" cellPadding="10px" >
 								<thead >
 									<tr>
-										<td>Product Name</td>
-										<td>Option</td>
-										<td>Subtotal ($)</td>
+										<td>Product Info</td>
+										<td width="10%">Subtotal ($)</td>
 									</tr>
 								</thead>
 								<tbody>
 									{quoteFormData.products.map((product) => {
-										return (
-											<tr>
-												<td>{product["name"]}</td>
-												<td>{product["option"]}</td>
-												<td style={{ textAlign: "right" }}>
-													{product["price"]}
-												</td>
-											</tr>
-										);
+										if(product["isProduct"])
+											return (
+													<tr>
+														<td>
+															{product["name"]} <br></br>
+															{product["option"]}<br></br>
+														</td>
+														<td style={{ textAlign: "right" }}>
+															{product["price"]}
+														</td>
+													</tr>
+											)
+										else
+											return (
+												<tr>
+													<td colSpan="2">
+														{product["detail"]}
+													</td>
+													
+												</tr>
+											)
 									})}
 								</tbody>
                                 <tfoot>
                                     <tr style={{ borderTop: "2px solid black" }}>
-									<td></td>
-										<td>Subtotal ($)</td>
+										<td style={{ textAlign: "right" }}>Subtotal ($)</td>
 										<td style={{ textAlign: "right" }}>{quoteFormData.subtotal} </td>
 									</tr>
                                     <tr>
-										<td></td>
-										<td>Tax %</td>
+										<td style={{ textAlign: "right" }}>Tax %</td>
 										<td style={{ textAlign: "right" }}>{quoteFormData.taxper} </td>
 									</tr>
                                     <tr>
-										<td></td>
-										<td>Tax $</td>
+										<td style={{ textAlign: "right" }}>Tax $</td>
 										<td style={{ textAlign: "right" }}>{quoteFormData.tax}</td>
 									</tr>
                                     <tr>
-										<td></td>
-										<td>Total ($)</td>
+										<td style={{ textAlign: "right" }}>Total ($)</td>
 										<td style={{ textAlign: "right" }}>{quoteFormData.total}</td>
 									</tr>
                                 </tfoot>

@@ -2,24 +2,39 @@ import React, {useState, useEffect} from "react";
 import { useRouteMatch, useHistory } from "react-router-dom";
 import Button from "../../component/quotes/Button";
 import {useInput} from '../../hooks/input-hook';
+import { useParams } from "react-router";
 import {useSelector, useDispatch} from "react-redux";
 import CustomSelect from "../../component/quotes/CustomSelect";
 import qData from './quoteData.js';
 
 
+
 function QuoteOne(props) {
     
+    let { qid } = useParams();
+
     let { path, url } = useRouteMatch();
     let history = useHistory();
 
     const {value, bind, reset} = useInput('');
+    
     const data = useSelector( state => state.quoteOneReducer.quote_one);
     
-    const [quoteData, setQuoteData] = useState(props.quoteData);
-
+    let  quotes = qData.quote_data;
+    let selectedQuote  = (parseInt(qid)) ? quotes.find((d) => { return parseInt(d.id) == parseInt(qid) }): {};
+    
+    
+    if(Object.keys(selectedQuote).length == 0){
+        history.push(`/quotes`);
+    }
+    
+    const [quoteData, setQuoteData] = useState({});
+    
+    
+    
     useEffect(() => {
-        setQuoteData(props.quoteData);
-    },[props.quoteData]);
+        setQuoteData(selectedQuote);
+    },[selectedQuote]);
 
     const dispatch = useDispatch();
     const {value: firstName, bind: bindFirstName, reset: resetFirstName,assignValue: assignFirstName} = useInput();
@@ -37,28 +52,32 @@ function QuoteOne(props) {
     const {value: firm, bind: bindFirm, reset: resetFirm} = useInput(quoteData.firm);
     const {value: details, bind: bindDetails, reset: resetDetails} = useInput(quoteData.details);
 
-    const [productCounter, setProductCounter] = useState(0)
+    const [productCounter, setProductCounter] = useState(1)
     const [products, setProducts] = useState([{
+        isProduct: false,
+        detail: "",
         name: null,
         option: null,
-        price: 0.00
-
+        price: 0.00,
+        detail: ""
+    },{
+        isProduct: true,
+        detail: "",
+        name: null,
+        option: null,
+        price: 0.00,
+        detail: ""
     }])
 
-    const [customer, setCustomer] = useState("");
-
-    //const customers = qData.getGustomers();
     const customers = qData.customer_data;
-    
-
 
     function onCustomerSelect(e) {
-        if (!(e == null || e == "" || e == undefined)) {
-            setCustomer(null)
+        if ((e == null || e == "" || e == undefined)) {
+            
         } else {
-            setCustomer(e);
-            assignFirstName(e.first_name)
-            assignLastName(e.last_name)
+            let cust = customers.find((c) => { return parseInt(c.id) == parseInt(e) });
+            assignFirstName(cust.first_name)
+            assignLastName(cust.last_name)
         }
     }
     const [formSubmit, setFormSubmit] = useState(false)
@@ -93,8 +112,6 @@ function QuoteOne(props) {
         })
 
         props.onSetQuoteFormDataChange(payload);
-        // history.push(`/quotes/${quoteData.id}/print/`)
-        // setFormSubmit(true)
         reset();
         evt.preventDefault();
     }
@@ -126,6 +143,13 @@ function QuoteOne(props) {
     const changeProductOption = (i, e) => {
         var temp = products
         temp[i]["option"] = e.target.value
+        setProducts(temp)
+    }
+    
+    const handleDetailChange = (i, e) => {
+        var temp = products
+        temp[i]["detail"] = e.target.value
+        temp[i]["detail"].replace(/(?:\r\n|\r|\n)/g, '<br />')
         setProducts(temp)
     }
 
@@ -164,9 +188,6 @@ function QuoteOne(props) {
         var temp = products
         var calSubtotal = 0.00;
         var calTotal = 0.00;
-        // products.map(product => {
-        //     calTotal += parseFloat(product["price"])
-        // })
         temp.forEach((p) => {
             calSubtotal = (calSubtotal + parseFloat(p["price"]));
         })
@@ -181,42 +202,71 @@ function QuoteOne(props) {
 
     const renderRows = (prod) => {
         let rows = []
-        
+
         for (let i = 0; i <= productCounter; i++) {
 
+            if(products[i]["isProduct"]){
+                rows.push(
+                <tr>
+                    <td>
+                        <input type="text" name={`product[${productCounter}][name]`}
+                            onChange={(e) => {
+                                changeProductName(i, e)
+                            }}
+                            className="ant-input"
+                            placeholder="Name"/>
 
-            rows.push(<tr>
-                <td>
-                    <input type="text" name={`product[${productCounter}][name]`}
-                           onChange={(e) => {
-                               changeProductName(i, e)
-                           }}
-                           className="ant-input"
-                           placeholder="Name"/>
-
-                </td>
-                <td>
-                    <input type="text" name={`product[${productCounter}][option]`} placeholder="option"
-                           className="ant-input"
-                           onChange={(e) => {
-                               changeProductOption(i, e)
-                           }}/>
-                </td>
-                <td>
-                    <input type="number" name={`product[${productCounter}][price]`} placeholder="0.00" 
-                           defaultValue={`product[${productCounter}][price]`}
-                           className="ant-input"
-                           onChange={(e) => {
-                               handlePriceChange(i, e)
-                           }}
-                    />
-                </td>
-            </tr>)
+                    </td>
+                    <td>
+                        <input type="text" name={`product[${productCounter}][option]`} placeholder="option"
+                            className="ant-input"
+                            onChange={(e) => {
+                                changeProductOption(i, e)
+                            }}/>
+                    </td>
+                    <td>
+                        <input type="number" name={`product[${productCounter}][price]`} placeholder="0.00" 
+                            defaultValue="0.00"
+                            className="ant-input"
+                            onChange={(e) => {
+                                handlePriceChange(i, e)
+                            }}
+                        />
+                    </td>
+                    <td style={{textAlign:"right"}}>
+                    <Button size="sm" variant="danger"  onClick={(e) => { handleRemoveRow(i,e)}} >x</Button>
+                    </td>
+                </tr>);
+            }else{
+                rows.push(
+                <tr>
+                    <td colSpan="2">
+                        <textarea name={`product[${productCounter}][detail]`} cols="30" rows="3" 
+                            placeholder="Quote Details"
+                            className="ant-input"
+                            onChange={(e) => {
+                                handleDetailChange(i, e)
+                            }}
+                        >
+                        </textarea>
+                    </td>
+                    <td></td>
+                    <td style={{textAlign:"right"}}>
+                        <Button size="sm" variant="danger"  onClick={(e) => { handleRemoveRow(i,e)}} >x</Button>
+                    </td>
+                </tr>)
+                }
         }
-        // setProducts(productsObj)
         return rows
     }
-    const handleAddNewRow = (event) => {
+
+    const handleRemoveRow = (i,e) => {
+        e.preventDefault();
+        products.splice(i,1);
+        setProductCounter(productCounter-1);
+    }
+
+    const handleAddNewRow = (event,value) => {
 
         event.preventDefault();
         console.log(productCounter)
@@ -224,225 +274,160 @@ function QuoteOne(props) {
             console.log("inside if condition")
             setProductCounter(productCounter + 1)
         } else {
-
-
             console.log("inside else condition")
             setProductCounter(0)
         }
 
         var tempProducts = products
         tempProducts[tempProducts.length] = {
+            isProduct: value,
+            detail: "",
             name: null,
+            detail: "",
             option: null,
             price: 0.00
-
         }
         setProducts(tempProducts)
     }
-
-    if (formSubmit) {
-
-
-        return (
-            <div className="Quote">
-                <h2> {quoteData.quotename}</h2>
+        
+    return (
+        <form onSubmit={handleSubmit}>
+            <div className="Quote" style={{width:"80%"}}>
+                <h2> {quoteData.name}</h2>
                 <p>
-                    Attention: {data.first_name} {data.last_name}
+                    Select Customer:
+                    <CustomSelect data={customers} onSelectChange={onCustomerSelect}/>
+                    <br/>
+                    <br/>
+                    Customer:
+                    <input type="text" className="ant-input ant-col-8" name="first_name"
+                            placeholder="First Name" {...bindFirstName} />
+                    <input type="text" className="ant-input ant-col-8" name="last_name"
+                            placeholder="Last Name" {...bindLastName} />
+                    <br/>
+                    Address:
+                    <input type="text" className="ant-input" name="billing_address"
+                            placeholder="Billing Address" {...bindBillingAddress} />
+                    <br/>
+                    City:
+                    <input type="text" className="ant-input" name="city"
+                            placeholder="contractor city" {...bindCity} />
+
+                    <br/>
+                    Postal Code:
+
+                    <input type="text" className="ant-input"
+                            placeholder="contractor postal code" {...bindPostCode} />
+                    <br/>
+                    Phone:
+                    <input type="text" className="ant-input" name="phone_number"
+                            placeholder="contractor phone number" {...bindPhoneNumber} />
+
+                    <br/>
+                    Email:
+                    <input type="text" className="ant-input" name="email"
+                            placeholder="contractor email" {...bindEmail} />
+                    <br/>
+                    Quotes Details:
+                    <input  className="ant-input ant-textarea" name="details"
+                            placeholder="Quote Details" {...bindDetails}  />
+                    <br/>
+                    <table style={{width:"100%"}}>
+                        <thead>
+                        <tr>
+                            <td>Product Name</td>
+                            <td>Option</td>
+                            <td style={{textAlign:"right", width:"10%"}}>Subtotal ($)</td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {renderRows(products)}
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colSpan="3">
+                                <Button onClick={(e) => { handleAddNewRow(e,true)}} variant="primary" size="sm" >Add Product</Button>
+                                <span> </span>
+                                <Button onClick={(e) => {handleAddNewRow(e,false)}} variant="primary" size="sm" >Add Detail</Button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2" style={{ textAlign : "right"}}>Sub Total : </td>
+                            <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
+                            placeholder="Quote Total" value={subtotal} 
+                            onChange={(e) => {
+                            changeSubtotal(e)
+                            }}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2" style={{ textAlign : "right"}}>Tax % : </td>
+                            <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
+                            placeholder="Quote Tax %" value={taxper} 
+                            onChange={(e) => {
+                            changeTaxper(e)
+                            }}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2" style={{ textAlign : "right"}}>Tax Calc : </td>
+                            <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
+                            placeholder="Quote Tax $" value={tax} 
+                            onChange={(e) => {
+                            changeTax(e)
+                            }}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2" style={{ textAlign : "right"}}>Total : </td>
+                            <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
+                            placeholder="Quote Total" value={total} 
+                            onChange={(e) => {
+                            changeTotal(e)
+                            }}
+                            /></td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2" style={{ textAlign : "left"}}> </td>
+                            <td> Overried : <input  className="ant-checkbox" name="manual" type="checkbox" defaultChecked={manualcalc} 
+                            onChange={(e) => { handleManualcalc(e)
+                            }}
+                            /></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                    Notes to customer:
+                    <input type="text" className="ant-input" name="customer_notes"
+                            placeholder="Notes to Customer" {...bindCustomerNotes} />
+
+                    <br/>
+
+                    Notes to installers:
+                    <input type="text" className="ant-input" name="installer_notes"
+                            placeholder="Notes to installers" {...bindInstallerNotes} />
+
+                    <br/>
+                    Estimator:
+                    <input type="text" className="ant-input" name="salesman"
+                            placeholder="salesman Name" {...bindSalesman} />
+
+                    <br/>
+                    WSIB: #
+                    <input type="text" className="ant-input" name="wsib" placeholder="wsib" {...bindWsib} />
+
+                    <br/> <br/>
+                    Account:  #{account}
+                    <br/>
+                    Firm: #{firm}
+                    <br/>
+                    <br/>
+                    <Button size="md" variant="primary" type="submit" class="ant-btn ant-btn-primary">Submit</Button>
                 </p>
-                <br/>
-                Address: {data.billing_address}
-                <br/>
-                City:
-                {data.city}
-                <br/>
-                Postal Code:
-                {data.post_code}
-                <br/>
-                Phone:
-                {data.phone_number}
-                <br/>
-                Email:
-                {data.email}
-                <br/>
-                {data.details}
-                <br/>
-                {data.products.length > 0 &&
-                <table>
-                    <thead>
-                    <tr>
-                        <td>Product Name</td>
-                        <td>Option</td>
-                        <td>Subtotal ($)</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        data.products.map(product => {
-                            return (
-                                <tr>
-                                    <td>{product['name']}</td>
-                                    <td>{product['option']}</td>
-                                    <td>{product['price']}</td>
-                                </tr>
-                            )
-                        })
-                    }
-
-                    </tbody>
-                </table>
-                }
-                Notes to customer: {data.customer_notes}
-                <br/>
-
-                Notes to installers: {data.installer_notes}
-                <br/>
-                Estimator: {data.salesman}
-                <br/>
-                WSIB# {data.wsib}
-                <br/>
-                Account: {data.account}
-                <br/>
-                Firm # {data.firm}
-                <br/>
             </div>
-        )
-    } else {
-        return (
-            <form onSubmit={handleSubmit}>
-                <div className="Quote">
-                    <h2> {quoteData.name}</h2>
-                    <p>
-                        Select Customer:
-                        <CustomSelect data={customers} onSelectChange={onCustomerSelect}/>
-                        <br/>
-                        Customer:
-                        <input type="text" className="ant-input ant-col-8" name="first_name"
-                               placeholder="First Name" {...bindFirstName} />
-                        <input type="text" className="ant-input ant-col-8" name="last_name"
-                               placeholder="Last Name" {...bindLastName} />
-                        <br/>
-                        Address:
-                        <input type="text" className="ant-input" name="billing_address"
-                               placeholder="Billing Address" {...bindBillingAddress} />
-                        <br/>
-                        City:
-                        <input type="text" className="ant-input" name="city"
-                               placeholder="contractor city" {...bindCity} />
-
-                        <br/>
-                        Postal Code:
-
-                        <input type="text" className="ant-input"
-                               placeholder="contractor postal code" {...bindPostCode} />
-                        <br/>
-                        Phone:
-                        <input type="text" className="ant-input" name="phone_number"
-                               placeholder="contractor phone number" {...bindPhoneNumber} />
-
-                        <br/>
-                        Email:
-                        <input type="text" className="ant-input" name="email"
-                               placeholder="contractor email" {...bindEmail} />
-                        <br/>
-                        Quotes Details:
-                        <input  className="ant-input ant-textarea" name="details"
-                               placeholder="Quote Details" {...bindDetails}  />
-                               
-                        <br/>
-                        <table>
-                            <thead>
-                            <tr>
-                                <td>Product Name</td>
-                                <td>Option</td>
-                                <td>Subtotal ($)</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {renderRows(products)}
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td colSpan="3">
-                                    <Button size="2" onClick={handleAddNewRow} varient="primary" class="ant-btn">Add+</Button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2" style={{ textAlign : "right"}}>Sub Total : </td>
-                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
-                               placeholder="Quote Total" value={subtotal} 
-                               onChange={(e) => {
-                                changeSubtotal(e)
-                                }}
-                               /></td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2" style={{ textAlign : "right"}}>Tax % : </td>
-                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
-                               placeholder="Quote Tax %" value={taxper} 
-                               onChange={(e) => {
-                                changeTaxper(e)
-                                }}
-                               /></td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2" style={{ textAlign : "right"}}>Tax Calc : </td>
-                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
-                               placeholder="Quote Tax $" value={tax} 
-                               onChange={(e) => {
-                                changeTax(e)
-                                }}
-                               /></td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2" style={{ textAlign : "right"}}>Total : </td>
-                                <td><input  className="ant-input ant-textarea" name="details" type="number" step="0.01" readOnly={!manualcalc}
-                               placeholder="Quote Total" value={total} 
-                               onChange={(e) => {
-                                changeTotal(e)
-                                }}
-                               /></td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2" style={{ textAlign : "left"}}>Overried : </td>
-                                <td><input  className="ant-input ant-checkbox" name="manual" type="checkbox" defaultChecked={manualcalc} 
-                               onChange={(e) => { handleManualcalc(e)
-                               }}
-                               /></td>
-                            </tr>
-                            </tfoot>
-                        </table>
-
-                        Notes to customer:
-                        <input type="text" className="ant-input" name="customer_notes"
-                               placeholder="Notes to Customer" {...bindCustomerNotes} />
-
-                        <br/>
-
-                        Notes to installers:
-                        <input type="text" className="ant-input" name="installer_notes"
-                               placeholder="Notes to installers" {...bindInstallerNotes} />
-
-                        <br/>
-                        Estimator:
-                        <input type="text" className="ant-input" name="salesman"
-                               placeholder="salesman Name" {...bindSalesman} />
-
-                        <br/>
-                        WSIB: #
-                        <input type="text" className="ant-input" name="wsib" placeholder="wsib" {...bindWsib} />
-
-                        <br/> <br/>
-                        Account:  #{account}
-                        <br/>
-                        Firm: #{firm}
-                        <br/>
-                        <br/>
-                        <Button size="2" varient="primary" type="submit" class="ant-btn ant-btn-primary">Submit</Button>
-                    </p>
-                </div>
-            </form>
-        );
-    }
+        </form>
+    );
 }
 
 

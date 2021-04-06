@@ -6,7 +6,7 @@ import QuotePrint from "./QuotePrint";
 
 export default function Quotes() {
 
-  const [quoteDataId, setQuoteDataId] = useState('1');
+  const [quoteDataId, setQuoteDataId] = useState('0');
   const [quoteData, setQuoteData] = useState({});
   const [quoteFormData, setQuoteFormData] = useState({});
 
@@ -18,7 +18,6 @@ export default function Quotes() {
         setQuoteDataId(data.id);
         setQuoteData(data);
         history.push(`${url}/${data.id}/new/`)
-
     }else{
         setQuoteData({});
     }
@@ -48,13 +47,13 @@ export default function Quotes() {
         <Route exact path={path} >
           <FormOne quoteDataId={quoteDataId} onSetQuoteDataChange={onSetQuoteDataChange} />
           </Route>
-        <Route path={`/quotes/${quoteDataId}/new`} >
+        <Route path="/quotes/:qid/new" >
           <QuoteOne key={quoteData} quoteData={quoteData} onSetQuoteFormDataChange={onSetQuoteFormDataChange} />
         </Route>
-        <Route path={`/quotes/${quoteDataId}/edit`} >
+        <Route path="/quotes/:qid/edit" >
           <QuoteOne key={quoteData} quoteData={quoteData} quoteFormData={quoteFormData} onSetQuoteFormDataChange={onSetQuoteFormDataChange} />
         </Route>
-        <Route path={`/quotes/${quoteDataId}/print`} >
+        <Route path="/quotes/:qid/print" >
           <QuotePrint key={quoteData} quoteFormData={quoteFormData}  quoteData={quoteData} onEditQuoteFormData={onEditQuoteFormData} />
         </Route>
       </Switch>
