@@ -2,8 +2,9 @@ import React, { useState, useEffect, Link } from "react";
 import { Card, Table, Button, Modal, Form, Input, message, Select } from "antd";
 import { getCustomers, getAddresses } from "../../api/customer";
 import "./index.css";
+import { withRouter } from "react-router";
 
-export default function Customers() {
+function Customers(props) {
   const [customers, setcustomers] = useState([]);
   const [addressList, setaddresses] = useState([]);
   const [form1] = Form.useForm();
@@ -32,7 +33,7 @@ export default function Customers() {
           <Button
             type="link"
             onClick={() => {
-              this.props.history.push(`/customerinfo/${data.id}`);
+              props.history.push(`/customerinfo/${data.id}`);
             }}
           >
             Show Customer
@@ -67,3 +68,4 @@ export default function Customers() {
     ></Table>
   );
 }
+export default withRouter(Customers);

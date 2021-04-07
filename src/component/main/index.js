@@ -9,9 +9,9 @@ import Users from "../../pages/users";
 import Roles from "../../pages/roles";
 import CustomerInfo from "../../pages/customerInfo";
 import AddressInfo from "../../pages/addressInfo";
-import NewOrders from "../../pages/neworder";
+import NewCusomter from "../../pages/newcustomer";
 import "./index.css";
-const id=0;
+const id = 0;
 export default function Main() {
   return (
     <div className="content-main">
@@ -25,7 +25,7 @@ export default function Main() {
         <Route path="/roles" component={Roles} />
         <Route path="/customerinfo/:customer" component={CustomerInfo} />
         <Route path="/addressinfo/:address" component={AddressInfo} />
-        <Route path="/neworders" component={NewOrders} />
+        <Route path="/newcustomer" component={NewCusomter} />
         <Redirect to="/home"></Redirect>
       </Switch>
     </div>
