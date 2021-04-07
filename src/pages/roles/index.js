@@ -60,13 +60,15 @@ export default function Roles() {
   ];
 
   //handle tree component(settings for role)
-  const handleTree = () => {};
+  const handleTree = () => {
+    message.success("success!");
+    setmodifyShow(false);
+  };
   //handle onrow callback function in table settings
   const handleonRow = (record, index) => {
     return {
       onClick: () => {
         setRow(record);
-        console.log(row.rolename);
       },
     };
   };
@@ -107,7 +109,6 @@ export default function Roles() {
       <Button
         type="primary"
         onClick={() => {
-          console.log("click");
           setmodifyShow(true);
         }}
         disabled={!row.id}
