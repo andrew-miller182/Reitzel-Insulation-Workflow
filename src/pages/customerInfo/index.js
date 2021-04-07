@@ -2,12 +2,14 @@ import React, {useEffect, setState, useState} from 'react';
 import { Card, Table, Button, Modal, Form, Input, message, Select, Space } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import {getRegion, updateCustomer, getRegionAPI, getCustomer, getCustomerAddresses, deleteCustomer} from '../../api/customer';
-import { Redirect, useRouteMatch } from "react-router-dom";
+import { Redirect, useRouteMatch, useHistory } from "react-router-dom";
+import { withRouter } from "react-router";
+import { PropertiesPanel } from 'devextreme-react/diagram';
  const { Item } = Form;
 const { confirm } = Modal;
 const { Option } = Select;
 
-export default function CustomerInfo() {
+export function CustomerInfo() {
 
   let match = useRouteMatch('/customerinfo/:customer').params.customer;
   const [showForm, setShowForm] = useState(false);
@@ -123,14 +125,17 @@ export default function CustomerInfo() {
           onOk() {
             return new Promise((resolve, reject) => {
               const result = deleteCustomer(id);
-              if (result.status === 200) message.success("Customer has been successfully deleted");
-              <Redirect to="/customers" ></Redirect>
+              console.log(result);
+              message.success("Customer has been successfully deleted");
+              resolve();
+              
             });
           },
           onCancel() {
             console.log("Cancel");
           },
         });
+        
       }
     const columns =[
       {
@@ -305,3 +310,5 @@ export default function CustomerInfo() {
         </div>
       )
     }
+
+    export default withRouter(CustomerInfo)

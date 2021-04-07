@@ -37,7 +37,7 @@ export default function NewCustomer(props) {
           rules={[
             {
               required: true,
-              message: "Cannot be Emptry!",
+              message: "Cannot be Empty",
             },
           ]}
         >
@@ -59,7 +59,7 @@ export default function NewCustomer(props) {
           rules={[
             {
               required: true,
-              message: "Cannot be Emptry!",
+              message: "Cannot be Empty",
             },
           ]}
         >
@@ -70,7 +70,7 @@ export default function NewCustomer(props) {
           rules={[
             {
               required: true,
-              message: "Cannot be Emptry!",
+              message: "Cannot be Empty",
             },
           ]}
         >
@@ -81,7 +81,7 @@ export default function NewCustomer(props) {
           rules={[
             {
               required: true,
-              message: "Cannot be Emptry!",
+              message: "Cannot be Empty",
             },
           ]}
         >
@@ -92,7 +92,7 @@ export default function NewCustomer(props) {
           rules={[
             {
               required: true,
-              message: "Cannot be Emptry!",
+              message: "Cannot be Empty",
             },
           ]}
         >
@@ -103,7 +103,7 @@ export default function NewCustomer(props) {
           rules={[
             {
               required: true,
-              message: "Cannot be Emptry!",
+              message: "Cannot be Empty",
             },
           ]}
         >
@@ -114,7 +114,7 @@ export default function NewCustomer(props) {
           rules={[
             {
               required: true,
-              message: "Cannot be Emptry!",
+              message: "Cannot be Empty",
             },
           ]}
         >

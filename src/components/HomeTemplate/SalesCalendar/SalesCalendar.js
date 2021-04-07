@@ -5,29 +5,68 @@ import Switch from 'devextreme-react/switch';
 import Scheduler, {Resource} from 'devextreme-react/scheduler';
 import SalesTemplate from './SalesTemplate.js'
 import SalesTooltip from './salesTooltip.js';
-import { regionColor} from './salesData';
 import {getEstimates, deleteEstimate, getUsers, updateEstimate, getRegionAPI} from '../../../api/calendar';
 import CustomStore from 'devextreme/data/custom_store';
+import {formatDate, addHours} from 'date-fns'
+
+
+const { zonedTimeToUtc, utcToZonedTime, format } = require('date-fns-tz')
 
 const dataSource = new CustomStore({
   key: "EstimateID",
   load: async () => {
     const data = await getEstimates();
-    console.log(data.data);
-    return data.data
+    let formatData = data.data.map((item) => ({
+      EstimateID : item.EstimateID,
+      CustomerID : item.CustomerID,
+      AddressID : item.AddressID,
+      UserID : item.UserID,
+      JobType : item.JobType,
+      CreationDate : item.CreationDate,
+      EstimateInfo : item.EstimateInfo,
+      startDate : timeFormat(item.startDate),
+      endDate : timeFormat(item.endDate)
+    }));
+    console.log(formatData);
+    return formatData
   },
   update: async (key, values) => {
-    console.log(values);
-    const check = await updateEstimate(key, values);
+    let formatData = {
+      EstimateID : values.EstimateID,
+      CustomerID : values.CustomerID,
+      AddressID : values.AddressID,
+      UserID : values.UserID,
+      JobType : values.JobType,
+      CreationDate : values.CreationDate,
+      EstimateInfo : values.EstimateInfo,
+      startDate : timeDeformat(values.startDate),
+      endDate : timeDeformat(values.endDate)
+  }
+    const check = await updateEstimate(key, formatData);
+    console.log(check);
     return check;
   },
   remove: async(key) => {
     console.log(`removed ${key}`);
     const data = await deleteEstimate(key);
     return data
+  },
+  insert: async (key, values) =>{
+    console.log("attempted insert");
   }
 });
 
+const timeFormat = (date) => {
+   let newdate = zonedTimeToUtc(new Date(date), 'America/Edmonton');
+   var formatteddate = format(newdate, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+   return formatteddate;
+}
+
+const timeDeformat = (date) => {
+  let newdate = utcToZonedTime(new Date(date), 'America/Edmonton');
+  var formatteddate = format(newdate, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
+   return formatteddate;
+}
 const currentDate = new Date();
 let date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 const views = ['day','week', 'workWeek','month'];
@@ -37,6 +76,7 @@ const renderResourceCell = (model) => {
       <i>{model.data.FirstName}</i>
   );
 }
+
 
 //const onAppointmentDeleting = (e) => {
 //  window.confirm("Are you sure you wish to delete this appointment?") &&
@@ -106,8 +146,8 @@ class SalesCalendar extends React.Component {
       
       <div>
       <Scheduler
-        timeZone="America/Toronto"
-        groups = {groups}
+        timeZone="America/Edmonton"
+        //groups = {groups}
         groupByDate={this.state.groupByDate}
         resourceCellRender={renderResourceCell}
         dataSource={dataSource}
@@ -115,7 +155,8 @@ class SalesCalendar extends React.Component {
         defaultCurrentView="workWeek"
         defaultCurrentDate={date}
         height={800}
-        startDayHour={6}
+        startDayHour={0}
+        endDayHour={24}
         appointmentComponent={SalesTemplate}
         //appointmentTooltipComponent={SalesTooltip}
         //onAppointmentDeleting={onAppointmentDeleting}
