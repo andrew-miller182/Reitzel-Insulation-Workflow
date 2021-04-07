@@ -84,10 +84,8 @@ export default function Users() {
           <Button
             type="primary"
             onClick={() => {
-              setdeleteShow(true);
               setselectedData(data);
-              showDeleteConfirm(data.id);
-              setForce(true);
+              showDeleteConfirm(data.key);
             }}
           >
             Delete
@@ -117,11 +115,11 @@ export default function Users() {
     const value = form1.getFieldsValue();
     const { loginId, loginPwd, email, role } = value;
     const id = selectedData.key;
-
+    console.log("id", id);
     //update data in the backend
     const result = await updateUser(id, loginId, loginPwd, email, role);
     setupdateShow(false);
-
+    console.log(result);
     if (result.data.status === 1) {
       message.success("success!");
     }
@@ -142,14 +140,9 @@ export default function Users() {
       cancelText: "No",
       onOk() {
         return new Promise((resolve, reject) => {
-          deleteUser(id).then(
-            (data) => {
-              resolve();
-            },
-            (reason) => {
-              reject(reason);
-            }
-          );
+          const result = deleteUser(id);
+          if (result === 1) message.success("success!");
+          resolve();
         });
       },
       onCancel() {
@@ -162,7 +155,7 @@ export default function Users() {
     const func = async () => {
       var result = await getUsers();
       var tables = result.data.map((item) => ({
-        id: item.UserID,
+        id: item.UserId,
         loginId: item.FirstName,
         loginPwd: item.Password,
         email: item.Email,

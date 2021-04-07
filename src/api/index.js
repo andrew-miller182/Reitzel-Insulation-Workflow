@@ -32,7 +32,8 @@ export async function getLogin(loginId, loginPwd) {
 //add user
 export async function addUser(user) {
   var tableName = "users";
-  var values = `null,'${user.loginId}','${user.loginId}','${user.email}','${user.loginPwd}','${user.role}'`;
+  var id = Math.round(Math.random() * 300 + 10);
+  var values = `'${id}','${user.loginId}','${user.loginId}','${user.email}','${user.loginPwd}','${user.role}'`;
 
   var users = await ajax("/insertValues", { tableName, values }, "post");
   console.log("user", users);
@@ -60,10 +61,9 @@ export async function updateUser(id, loginId, loginPwd, email, role) {
 //delete user
 export async function deleteUser(id) {
   var tableName = "users";
-  id = parseInt(id);
-  console.log("id", id);
-  var condition = `UserID = ${id}`;
-  const result = await ajax("/deleteValues", { tableName, condition }, "post");
+  var columns = "*";
+  var condition = `UserID='${id}'`;
+  const result = await ajax("/deleteValues", { tableName, columns }, "post");
   console.log("result", result);
   if (result !== []) return result;
   else {
