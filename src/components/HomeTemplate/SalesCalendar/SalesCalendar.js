@@ -7,7 +7,6 @@ import SalesTemplate from './SalesTemplate.js'
 import SalesTooltip from './salesTooltip.js';
 import {getEstimates, deleteEstimate, getUsers, updateEstimate, getRegionAPI} from '../../../api/calendar';
 import CustomStore from 'devextreme/data/custom_store';
-import {formatDate, addHours} from 'date-fns'
 
 
 const { zonedTimeToUtc, utcToZonedTime, format } = require('date-fns-tz')
@@ -21,9 +20,9 @@ const dataSource = new CustomStore({
       CustomerID : item.CustomerID,
       AddressID : item.AddressID,
       UserID : item.UserID,
-      JobType : item.JobType,
       CreationDate : item.CreationDate,
       EstimateInfo : item.EstimateInfo,
+      RegionID : item.RegionID,
       startDate : timeFormat(item.startDate),
       endDate : timeFormat(item.endDate)
     }));
@@ -36,9 +35,9 @@ const dataSource = new CustomStore({
       CustomerID : values.CustomerID,
       AddressID : values.AddressID,
       UserID : values.UserID,
-      JobType : values.JobType,
       CreationDate : values.CreationDate,
       EstimateInfo : values.EstimateInfo,
+      RegionID : values.RegionID,
       startDate : timeDeformat(values.startDate),
       endDate : timeDeformat(values.endDate)
   }
@@ -71,13 +70,24 @@ const currentDate = new Date();
 let date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
 const views = ['day','week', 'workWeek','month'];
 const groups = ['UserID'];
+
 const renderResourceCell = (model) => {
   return (
-      <i>{model.data.FirstName}</i>
+      <b>{model.data.FirstName}</b>
   );
 }
 
+const users = [
+  {
+    FirstName:"John",
+    id: 1
+  },
+  {
+    FirstName: "Curtz",
+    id: 2
 
+  }
+]
 //const onAppointmentDeleting = (e) => {
 //  window.confirm("Are you sure you wish to delete this appointment?") &&
 //        this.dataSource.remove(e)
@@ -118,21 +128,30 @@ class SalesCalendar extends React.Component {
   }
   async regionSource() {
     const data = await getRegionAPI();
-    console.log(data.data);
-    return data.data;
+    let regionData = data.data.map((item) => ({
+      id  : item.RegionID,
+      region: item.Region,
+      color: item.color
+    }))
+    console.log(regionData);
+    return regionData;
   }
 
   async salesmanSource() {
     const data = await getUsers();
-    console.log(data.data);
-    return data.data;
+    let salesData = data.data.map((item) => ({
+      id: item.UserID,
+      FirstName : item.FirstName,
+      LastName: item.LastName
+    }))
+    console.log(salesData);
+    return salesData;
   }
   componentDidMount(){
     this.InfoIsHere();
 }
+
  
-
-
   render() {
     if (this.state.info == false){
         return (
@@ -147,7 +166,7 @@ class SalesCalendar extends React.Component {
       <div>
       <Scheduler
         timeZone="America/Edmonton"
-        //groups = {groups}
+        groups = {groups}
         groupByDate={this.state.groupByDate}
         resourceCellRender={renderResourceCell}
         dataSource={dataSource}
