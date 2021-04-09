@@ -13,7 +13,7 @@ function Searchbar(props) {
     setValue(e.target.value);
     if (e.target.value == "customer") {
       props.history.push("/newcustomer");
-    } else props.history.push("/home");
+    } else props.history.push("/newestimate");
   };
   const onSearch = (value) => {
     message.success(value);

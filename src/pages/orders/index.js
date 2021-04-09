@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCustomers } from "../../api/customer";
+import { getEstimates } from "../../api/neworder";
 import { Input, Table, Form, Modal, Card, Select, Button } from "antd";
 import "./index.css";
 const { Item } = Form;
@@ -24,75 +24,55 @@ export default function Orders() {
   const [selectedData, setselectedData] = useState({});
   const columns = [
     {
-      title: "FirstName",
-      dataIndex: "FirstName",
-      key: "FirstName",
-    },
-    {
-      title: "LastName",
-      dataIndex: "LastName",
-      key: "LastName",
+      title: "EstimateID",
+      dataIndex: "EstimateID",
+      key: "EstimateID",
     },
 
     {
-      title: "Phone",
-      dataIndex: "Phone",
-      key: "Phone",
+      title: "CustomerID",
+      dataIndex: "CustomerID",
+      key: "CustomerID",
     },
     {
-      title: "Email",
-      dataIndex: "Email",
-      key: "Email",
+      title: "UserID",
+      dataIndex: "UserID",
+      key: "UserID",
     },
     {
-      title: "BillingAddress",
-      dataIndex: "BillingAddress",
-      key: "BillingAddress",
+      title: "JobType",
+      dataIndex: "JobType",
+      key: "JobType",
     },
     {
-      title: "City",
-      dataIndex: "City",
-      key: "City",
+      title: "EstimateInfo",
+      dataIndex: "EstimateInfo",
+      key: "EstimateInfo",
     },
     {
-      title: "PostalCode",
-      dataIndex: "PostalCode",
-      key: "PostalCode",
+      title: "CreationDate",
+      dataIndex: "CreationDate",
+      key: "CreationDate",
     },
     {
-      title: "Operate",
-      key: "operate",
-      render: (data) => (
-        <div className="operate-button">
-          <Button
-            type="primary"
-            onClick={() => {
-              setselectedData(data);
-              setupdateShow(true);
-              form.setFieldsValue({
-                FirstName: data.FirstName,
-                LastName: data.LastName,
-                Phone: data.Phone,
-                Email: data.Email,
-                BillingAddress: data.BillingAddress,
-                City: data.City,
-                PostalCode: data.PostalCode,
-                Region: data.Region,
-              });
-            }}
-          >
-            Modify
-          </Button>
-          <Button
-            type="primary"
-            onClick={() => {
-              setselectedData(data);
-            }}
-          >
-            Delete
-          </Button>
-        </div>
-      ),
+      title: "CreationDate",
+      dataIndex: "CreationDate",
+      key: "CreationDate",
+    },
+    {
+      title: "startDate",
+      dataIndex: "startDate",
+      key: "startDate",
+    },
+    {
+      title: "endDate",
+      dataIndex: "endDate",
+      key: "endDate",
+    },
+    {
+      title: "RegionID",
+      dataIndex: "RegionID",
+      key: "RegionID",
     },
   ];
   const regions = [
@@ -110,7 +90,7 @@ export default function Orders() {
     <Option key={index + 1}>{item}</Option>
   ));
   useEffect(() => {
-    getCustomers().then((data) => {
+    getEstimates().then((data) => {
       console.log("data", data);
       setorders(data.data);
     });
@@ -119,6 +99,7 @@ export default function Orders() {
     <div>
       <Card bordered>
         <Table
+          scroll={{ x: 1300 }}
           style={{ width: "80%", margin: "0 auto" }}
           rowKey="Phone"
           bordered

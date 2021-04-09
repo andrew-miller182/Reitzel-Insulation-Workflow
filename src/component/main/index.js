@@ -10,6 +10,7 @@ import Roles from "../../pages/roles";
 import CustomerInfo from "../../pages/customerInfo";
 import AddressInfo from "../../pages/addressInfo";
 import NewCusomter from "../../pages/newcustomer";
+import NewEstimate from "../../pages/newestimate";
 import "./index.css";
 const id = 0;
 export default function Main() {
@@ -26,6 +27,7 @@ export default function Main() {
         <Route path="/customerinfo/:customer" component={CustomerInfo} />
         <Route path="/addressinfo/:address" component={AddressInfo} />
         <Route path="/newcustomer" component={NewCusomter} />
+        <Route path="/newestimate" component={NewEstimate} />
         <Redirect to="/home"></Redirect>
       </Switch>
     </div>
