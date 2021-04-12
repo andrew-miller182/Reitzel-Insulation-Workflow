@@ -2,7 +2,6 @@ import { createStore, combineReducers } from 'redux'
 
 import QuoteOneReducer from './reducers/quoteOneReducer'
 const reducers = {
-
     quoteOneReducer: QuoteOneReducer
 }
 const reducer = combineReducers(reducers)
