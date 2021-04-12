@@ -13,18 +13,27 @@ import { datas } from "../../api/index";
 const { Header, Content, Footer, Sider } = Layout;
 
 export default class Homepage extends React.Component {
+  state = {
+    user: "",
+  };
+  componentDidMount = async () => {
+    const user = await getUser();
+    this.setState({ user });
+  };
   render() {
+    const { user } = this.state;
+    const SecurityLevel =
+      (this.state.user && this.state.user.SecurityLevel) || "";
+    const FirstName = (this.state.user && this.state.user.FirstName) || "";
+    if (!getUser()) return <Redirect to="/login" />;
     return (
       <Layout className="layout">
         <Sider>
-          <Leftnav
-            role={datas.user[0].role}
-            imgUrl={datas.user[0].imgUrl}
-          ></Leftnav>
+          <Leftnav role={SecurityLevel} imgUrl={datas.user[0].imgUrl}></Leftnav>
         </Sider>
         <Layout className="main-layout">
           <Header className="header">
-            <Head username={datas.user[0].loginId} />
+            <Head username={FirstName} />
           </Header>
 
           <Content className="content">

@@ -7,6 +7,8 @@ import {useSelector, useDispatch} from "react-redux";
 import CustomSelect from "../../component/quotes/CustomSelect";
 import qData from './quoteData.js';
 
+import axios from "axios";
+import Header from './header';
 
 
 function QuoteOne(props) {
@@ -123,7 +125,8 @@ function QuoteOne(props) {
     
     const handleSubmit = (evt) => {
 
-        var payload = {
+        var payload = 
+        {
             first_name: firstName,
             last_name: lastName,
             billing_address: billingAddress,

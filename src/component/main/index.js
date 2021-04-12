@@ -7,7 +7,12 @@ import Invoices from "../../pages/invoices";
 import Customers from "../../pages/customers";
 import Users from "../../pages/users";
 import Roles from "../../pages/roles";
+import CustomerInfo from "../../pages/customerInfo";
+import AddressInfo from "../../pages/addressInfo";
+import NewCusomter from "../../pages/newcustomer";
+import NewEstimate from "../../pages/newestimate";
 import "./index.css";
+const id = 0;
 export default function Main() {
   return (
     <div className="content-main">
@@ -19,6 +24,10 @@ export default function Main() {
         <Route path="/customers" component={Customers} />
         <Route path="/users" component={Users} />
         <Route path="/roles" component={Roles} />
+        <Route path="/customerinfo/:customer" component={CustomerInfo} />
+        <Route path="/addressinfo/:address" component={AddressInfo} />
+        <Route path="/newcustomer" component={NewCusomter} />
+        <Route path="/newestimate" component={NewEstimate} />
         <Redirect to="/home"></Redirect>
       </Switch>
     </div>

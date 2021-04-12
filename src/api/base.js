@@ -10,7 +10,7 @@ axios.interceptors.response.use(null, (err) => {
   if (err.response && err.response.status === 400) {
     message.warn("Please Login First");
   } else if (err.response && err.response.status === 404) {
-    message.warn("Forbbiden");
+    message.warn("Forbidden");
   } else if (err.response && err.response.status === 401) {
     message.warn("Access Denied...");
   } else if (expectedError) {

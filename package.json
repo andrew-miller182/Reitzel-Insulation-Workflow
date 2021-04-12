@@ -8,13 +8,20 @@
     "@testing-library/user-event": "^12.6.2",
     "antd": "^4.10.3",
     "axios": "^0.21.1",
+    "date-fns": "^2.19.0",
+    "date-fns-tz": "^1.1.3",
+    "devextreme": "^20.2.4",
+    "devextreme-aspnet-data-nojquery": "^2.8.2",
+    "devextreme-react": "^20.2.3",
     "jsonwebtoken": "^8.5.1",
+    "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "redux": "^4.0.5",
+    "scheduler": "^0.20.1",
     "store": "^2.0.12",
     "web-vitals": "^0.2.4"
   },
@@ -42,5 +49,11 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5001"
+  "proxy": "http://localhost:5001",
+  "devDependencies": {
+    "devextreme-cldr-data": "^1.0.3",
+    "devextreme-themebuilder": "^20.2.4",
+    "globalize": "^1.6.0",
+    "globalize-webpack-plugin": "^3.0.0"
+  }
 }

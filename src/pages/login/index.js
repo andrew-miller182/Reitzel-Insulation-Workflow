@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Input, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./index.css";
 import { getLogin, reqWeather } from "../../api/index";
 import { setUser, getUser } from "../../util/storage";
-import Catch from "../../util/catch";
 import { Redirect } from "react-router-dom";
 
 const { Item } = Form;
@@ -13,7 +12,8 @@ export default function Login(props) {
     const { loginId, loginPwd } = values;
     const result = await getLogin(loginId, loginPwd);
     reqWeather("calgary");
-    if (result === 1) {
+    if (result.data && result.data.length > 0) {
+      setUser(result.data[0]);
       props.history.replace("/");
       message.success("Login Success!");
     } else {
