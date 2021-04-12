@@ -1,5 +1,5 @@
 import axios from "axios";
-
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 let  qData = {
     quote_data: [
         {
@@ -101,17 +101,8 @@ let  qData = {
     getGustomers: async () => {
         return new Promise((resolved, reject) => {
             axios.post("http://localhost:5001/fetchValues",{ tableName: "customers"})
-            .then((resp) => { resolved(resp)})
-            .catch((err) => { console.error(err);
-            reject([
-                {
-                    id: "0",
-                    name:"No Customer",
-                    first_name: "No",
-                    last_name: "Customer",
-                }
-            ])
-        })
+            .then((resp) => { resolved(resp) })
+            .catch((err) => { reject([]) })
         });
     },
 };

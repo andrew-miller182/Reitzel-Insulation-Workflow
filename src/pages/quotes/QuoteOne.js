@@ -10,7 +10,8 @@ import qData from './quoteData.js';
 
 
 function QuoteOne(props) {
-    
+    const [isLoading, setLoading] = useState(true);
+
     let { qid } = useParams();
 
     let { path, url } = useRouteMatch();
@@ -29,11 +30,34 @@ function QuoteOne(props) {
     }
     
     const [quoteData, setQuoteData] = useState({});
+    const [customers, setCustomers] = useState([]);
     
-    
+    // const customers = qData.customer_data;
     
     useEffect(() => {
-        setQuoteData(selectedQuote);
+        qData.getGustomers().then((resp) =>{
+            var cust = [];
+            for (let i = 0; i < resp.data.length; i++) {
+                const c = resp.data[i];
+                cust.push({
+                    id : c.CustomerID,
+                    name : c.FirstName + " " + c.LastName,
+                    first_name : c.FirstName,
+                    last_name : c.LastName,
+                    phone : c.Phone,
+                    email : c.Email,
+                    address : c.BillingAddress,
+                    city : c.City,
+                    postCode : c.PostalCode,
+                    region : c.Region,
+                });
+            }
+            setCustomers(cust);    
+        })
+        .finally(() => {
+            setQuoteData(selectedQuote);
+            setLoading(false);
+        })        
     },[selectedQuote]);
 
     const dispatch = useDispatch();
@@ -69,8 +93,8 @@ function QuoteOne(props) {
         detail: ""
     }])
 
-    const customers = qData.customer_data;
-
+    
+    
     function onCustomerSelect(e) {
         if ((e == null || e == "" || e == undefined)) {
             
@@ -78,6 +102,21 @@ function QuoteOne(props) {
             let cust = customers.find((c) => { return parseInt(c.id) == parseInt(e) });
             assignFirstName(cust.first_name)
             assignLastName(cust.last_name)
+            assignPhoneNumber(cust.phone)
+            assignEmail(cust.email)
+            assignBillingAddress(cust.address)
+            assignCity(cust.city)
+            assignPostCode(cust.postCode)
+            // id : c.CustomerID,
+            // name : c.FirstName + " " + c.LastName,
+            // first_name : c.FirstName,
+            // last_name : c.LastName,
+            // phone : c.Phone,
+            //  : c.Email,
+            // address : c.BillingAddress,
+            // city : c.City,
+            // postCode : c.PostalCode,
+            // region : c.Region,
         }
     }
     const [formSubmit, setFormSubmit] = useState(false)
@@ -242,7 +281,7 @@ function QuoteOne(props) {
                 <tr>
                     <td colSpan="2">
                         <textarea name={`product[${productCounter}][detail]`} cols="30" rows="3" 
-                            placeholder="Quote Details"
+                            placeholder="Details"
                             className="ant-input"
                             onChange={(e) => {
                                 handleDetailChange(i, e)
@@ -289,7 +328,9 @@ function QuoteOne(props) {
         }
         setProducts(tempProducts)
     }
-        
+    if (isLoading) {
+        return <div className="App">Loading...</div>;
+    }
     return (
         <form onSubmit={handleSubmit}>
             <div className="Quote" style={{width:"80%"}}>
