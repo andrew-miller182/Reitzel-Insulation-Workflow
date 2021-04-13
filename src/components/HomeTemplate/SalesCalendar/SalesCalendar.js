@@ -77,17 +77,6 @@ const renderResourceCell = (model) => {
   );
 }
 
-const users = [
-  {
-    FirstName:"John",
-    id: 1
-  },
-  {
-    FirstName: "Curtz",
-    id: 2
-
-  }
-]
 //const onAppointmentDeleting = (e) => {
 //  window.confirm("Are you sure you wish to delete this appointment?") &&
 //        this.dataSource.remove(e)
@@ -177,7 +166,7 @@ class SalesCalendar extends React.Component {
         startDayHour={0}
         endDayHour={24}
         appointmentComponent={SalesTemplate}
-        //appointmentTooltipComponent={SalesTooltip}
+        appointmentTooltipComponent={SalesTooltip}
         //onAppointmentDeleting={onAppointmentDeleting}
         onAppointmentFormOpening={this.onAppointmentForm}
         >

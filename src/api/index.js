@@ -147,5 +147,4 @@ export const datas = {
       rolename: "manager",
     },
   ],
-  salesman: ["Join", "Curtz"],
 };

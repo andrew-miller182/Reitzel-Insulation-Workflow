@@ -120,7 +120,7 @@ export default function Orders() {
               rules={[
                 {
                   required: true,
-                  message: "Cannot be Emptry!",
+                  message: "Cannot be Empty",
                 },
               ]}
             >
@@ -142,7 +142,7 @@ export default function Orders() {
               rules={[
                 {
                   required: true,
-                  message: "Cannot be Emptry!",
+                  message: "Cannot be Empty",
                 },
               ]}
             >
@@ -153,7 +153,7 @@ export default function Orders() {
               rules={[
                 {
                   required: true,
-                  message: "Cannot be Emptry!",
+                  message: "Cannot be Empty",
                 },
               ]}
             >
@@ -164,7 +164,7 @@ export default function Orders() {
               rules={[
                 {
                   required: true,
-                  message: "Cannot be Emptry!",
+                  message: "Cannot be Empty",
                 },
               ]}
             >
@@ -175,7 +175,7 @@ export default function Orders() {
               rules={[
                 {
                   required: true,
-                  message: "Cannot be Emptry!",
+                  message: "Cannot be Empty",
                 },
               ]}
             >
@@ -186,7 +186,7 @@ export default function Orders() {
               rules={[
                 {
                   required: true,
-                  message: "Cannot be Emptry!",
+                  message: "Cannot be Empty",
                 },
               ]}
             >
@@ -197,7 +197,7 @@ export default function Orders() {
               rules={[
                 {
                   required: true,
-                  message: "Cannot be Emptry!",
+                  message: "Cannot be Empty",
                 },
               ]}
             >

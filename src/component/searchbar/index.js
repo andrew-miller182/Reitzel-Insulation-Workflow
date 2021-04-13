@@ -21,7 +21,7 @@ function Searchbar(props) {
 
   const options = [
     { label: "New Customer", value: "customer" },
-    { label: "New Order", value: "order" },
+    { label: "New Estimate", value: "order" },
   ];
 
   return (

@@ -1,8 +1,11 @@
 import React from "react";
 import { Form, Input, Button, Select, message } from "antd";
-import { addOrder } from "../../api/neworder";
+import { addOrder, addEstimate, getLatestCustomer, addAddress, getLatestAddress } from "../../api/neworder";
 import "./index.css";
-const id = 0;
+const layout = {
+  labelCol: { span: 2 },
+  wrapperCol: { span: 16 },
+};
 const { Item } = Form;
 const { Option } = Select;
 export default function NewCustomer(props) {
@@ -24,15 +27,19 @@ export default function NewCustomer(props) {
   const onFinish = async (values) => {
     console.log(values);
     var result = await addOrder(values);
-    if (result.status == 200) {
-      message.success("add success!");
+    var customerID = await getLatestCustomer();
+    var latestCustomer = customerID.data[0].CustomerID;
+    var newAddress = await addAddress(latestCustomer, values);
+    if (newAddress.status == 200) {
+      message.success("Added successfully");
       props.history.push("/customers");
     } else message.warn("fail");
   };
   return (
     <div className="neworder">
-      <Form form={form} onFinish={onFinish} wrapperCol={{ span: 14 }}>
+      <Form form={form} onFinish={onFinish} {...layout}>
         <Item
+        label="First Name"
           name="FirstName"
           rules={[
             {
@@ -44,6 +51,7 @@ export default function NewCustomer(props) {
           <Input placeholder="First Name" />
         </Item>
         <Item
+        label="Last Name"
           name="LastName"
           rules={[
             {
@@ -55,6 +63,7 @@ export default function NewCustomer(props) {
           <Input placeholder="Last Name" />
         </Item>
         <Item
+        label="Address"
           name="BillingAddress"
           rules={[
             {
@@ -66,6 +75,7 @@ export default function NewCustomer(props) {
           <Input placeholder="Billing Address" />
         </Item>
         <Item
+          label="City"
           name="City"
           rules={[
             {
@@ -74,9 +84,22 @@ export default function NewCustomer(props) {
             },
           ]}
         >
-          <Input placeholder="city" />
+          <Input placeholder="City" />
         </Item>
         <Item
+          label="Province"
+          name="Prov"
+          rules={[
+            {
+              required: true,
+              message: "Cannot be Empty",
+            },
+          ]}
+        >
+          <Input placeholder="Province" />
+        </Item>
+        <Item
+          label="Postal Code"
           name="PostalCode"
           rules={[
             {
@@ -85,9 +108,10 @@ export default function NewCustomer(props) {
             },
           ]}
         >
-          <Input placeholder="PostalCode" />
+          <Input placeholder="Postal Code" />
         </Item>
         <Item
+          label="Phone"
           name="Phone"
           rules={[
             {
@@ -99,17 +123,13 @@ export default function NewCustomer(props) {
           <Input placeholder="Phone Number" />
         </Item>
         <Item
+          label="Email"
           name="Email"
-          rules={[
-            {
-              required: true,
-              message: "Cannot be Empty",
-            },
-          ]}
         >
           <Input placeholder="Email" />
         </Item>
         <Item
+          label="Region"
           name="Region"
           rules={[
             {

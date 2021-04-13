@@ -3,12 +3,11 @@ import base from "./base";
 
 export async function addOrder(order) {
   var tableName = "customers";
-  var region = parseInt(order.Region);
   var values = `${null},'${order.FirstName}','${order.LastName}','${
     order.Phone
   }','${order.Email}','${order.BillingAddress}','${order.City}','${
     order.PostalCode
-  }',${region}`;
+  }',${order.Region}`;
 
   var orders = await ajax("/insertValues", { tableName, values }, "post");
   console.log("cusotmers", orders);
@@ -17,15 +16,13 @@ export async function addOrder(order) {
     return 0;
   }
 }
-export async function addEstimate(order) {
-  var tableName = "estimates";
-  var region = parseInt(order.Region);
-  var values = `${null},'1','1','1','${order.JobType}','${Date.now()}','${
-    order.EstimateInfo
-  }','${Date.now()}',${Date.now()},${region}`;
 
-  var orders = await ajax("/insertValues", { tableName, values }, "post");
-  if (orders !== []) return orders;
+export async function addEstimate(id, address, value) {
+  var tableName = "estimates";
+  var values = `${null},'${id}','${address}','${value.UserID}','${value.JobType}','${new Date()}','${value.estimateInfo}','${value.Region}','${value.startDate}','${value.endDate}'`;
+
+  var estimate = await ajax("/insertValues", { tableName, values }, "post");
+  if (estimate !== []) return estimate;
   else {
     return 0;
   }
@@ -42,6 +39,44 @@ export async function getEstimates() {
   );
   console.log("user", user);
   if (user !== []) return user;
+  else {
+    return 0;
+  }
+}
+
+export async function getLatestCustomer() {
+  let sql = `SELECT * FROM customers ORDER BY CustomerID DESC LIMIT 1`
+  const customer = await ajax(
+    "/processCustomQuery",
+    {sql},
+    "post"
+  );
+  if (customer !== []) return customer;
+  else{
+    return 0;
+  }
+}
+
+export async function getLatestAddress() {
+  let sql = `SELECT * FROM address ORDER BY AddressID DESC LIMIT 1`
+  const address = await ajax(
+    "/processCustomQuery",
+    {sql},
+    "post"
+  );
+  if (address !== []) return address;
+  else{
+    return 0;
+  }
+}
+
+export async function addAddress(id, value){
+  var tableName = "address";
+  var values = `${null},'${id}','${value.BillingAddress}','${value.PostalCode}','${value.City}','${value.Prov}','${value.Region}'`;
+
+  var address = await ajax("/insertValues", { tableName, values }, "post");
+  console.log("address", address);
+  if (address !== []) return address;
   else {
     return 0;
   }

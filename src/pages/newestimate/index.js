@@ -1,75 +1,127 @@
-import React, { useEffect } from "react";
-import { Form, DatePicker, Input, Button, Select, message } from "antd";
-import { addOrder, addEstimate } from "../../api/neworder";
-import { datas } from "../../api/index";
+import React, { useEffect, useState } from "react";
+import { Form, DatePicker, Input, Button, Select, message, Card } from "antd";
+import { addOrder, addEstimate, getLatestCustomer, addAddress, getLatestAddress } from "../../api/neworder";
+import {getRegionAPI, getUsers} from "../../api/calendar";
 import "./index.css";
-const id = 0;
+import TextArea from "antd/lib/input/TextArea";
+const { RangePicker } = DatePicker;
 const { Item } = Form;
 const { Option } = Select;
+const {format} = require('date-fns-tz');
+
+
 export default function NewEstimate(props) {
+  const [info, setInfo] = useState(false);
+  const [salesmen, setSalesmen] = useState([]);
+  const [regions, setRegions] = useState([]);
   const [form] = Form.useForm();
-  const regions = [
-    "Elmira & area",
-    "Guelph & area",
-    "Cambridge & area",
-    "Hamilton & area",
-    "Stratford & area",
-    "Listowel area",
-    "Greater Toronto Area",
-    "Kitchener - Waterloo",
-    "Brantford, Paris, Burford, Waterford, Brant County, Haldmald, Caledonia",
-  ];
-  const options = regions.map((item, index) => (
-    <Option key={index + 1}>{item}</Option>
+  const layout = {
+    labelCol: { span: 2 },
+    wrapperCol: { span: 16 },
+  };
+  const options = regions.map((item) => (
+    <Option key={item.id}>{item.region}</Option>
   ));
   const jobs = ["loosefill", "spray"];
   const options1 = jobs.map((item, index) => (
     <Option key={item}>{item}</Option>
   ));
-  const salesman = datas.salesman;
-  const options2 = salesman.map((item, index) => (
-    <Option key={item}>{item}</Option>
+  
+  const getregions = async() => {
+    const data = await getRegionAPI();
+    let regionData = data.data.map((item) => ({
+      id  : item.RegionID,
+      region: item.Region,
+      color: item.color
+    }));
+    setRegions(regionData);
+  }
+
+  const getsalesmen = async() => {
+    const data = await getUsers();
+    let salesData = data.data.map((item) => ({
+      id: item.UserID,
+      FirstName : item.FirstName,
+      LastName: item.LastName
+    }))
+    setSalesmen(salesData);
+  }
+
+  const options2 = salesmen.map((item) => (
+    <Option key={item.id}>{item.FirstName}</Option>
   ));
-  const regionId = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const options3 = regionId.map((item, index) => (
-    <Option key={index + 1}>{item}</Option>
-  ));
+
   const onFinish = async (values) => {
     console.log(values);
-    var {
-      FirstName,
-      LastName,
-      Phone,
-      Email,
-      BillingAddress,
-      City,
-      PostalCode,
-      Region,
-    } = values;
-    var orders = {
-      FirstName,
-      LastName,
-      Phone,
-      Email,
-      BillingAddress,
-      City,
-      PostalCode,
-      Region,
+    var customer = {
+      FirstName:values.FirstName,
+      LastName:values.LastName,
+      Phone:values.Phone,
+      Email:values.Email,
+      BillingAddress:values.BillingAddress,
+      City:values.City,
+      Prov:values.Prov,
+      PostalCode:values.PostalCode,
+      Region:values.Region,
     };
-    var estimates = {};
-    var result = await addOrder(orders);
+    var siteAddress = {
+      BillingAddress:values.siteAddress,
+      City:values.siteCity,
+      Prov:values.siteProv,
+      PostalCode:values.sitePostal
+    };
+    var estimate = {
+      UserID:values.salesman,
+      JobType:values.JobType,
+      Region:values.Region,
+      startDate:format(values.selectedDate[0]._d, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
+      endDate:format(values.selectedDate[1]._d, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
+      estimateInfo:values.EstimateInfo
+    }
+    console.log("estimate", estimate);
+    console.log("site", siteAddress)
+    var result = await addOrder(customer);
 
     if (result.status == 200) {
       message.success("add success!");
-      props.history.push("/orders");
     } else message.warn("fail");
+    var getCustomerID = await getLatestCustomer();
+    var latestCustomer = getCustomerID.data[0].CustomerID;
+    console.log('customerID', getCustomerID);
+    var newAddress = await addAddress(latestCustomer, customer);
+    if(siteAddress.BillingAddress !== undefined){
+      var siteAddressSent = await addAddress(latestCustomer, siteAddress);
+    }
+    var getAddressID = await getLatestAddress();
+    var latestAddress = getAddressID.data[0].CustomerID;
+    console.log(latestAddress);
+    console.log('addressID', getAddressID);
+    var estimateResult = await addEstimate(latestCustomer, getAddressID.data[0].AddressID, estimate);
+    props.history.push('/home');
   };
-  const handleDate = () => {};
-  useEffect(() => {}, []);
+
+
+
+  useEffect(() => {
+    getsalesmen();
+    getregions();
+    if(salesmen != [] && regions != []){
+      setInfo(true);
+    }
+  }, []);
+  if(info != true){
+    return (
+      <p>Loading Information...</p>
+    )
+  }
+  else{
   return (
+    
     <div className="neworder">
-      <Form form={form} onFinish={onFinish} wrapperCol={{ span: 14 }}>
+      <Card>
+      <Form form={form} onFinish={onFinish} {...layout}>
         <Item
+        label="First Name"
           name="FirstName"
           rules={[
             {
@@ -81,6 +133,7 @@ export default function NewEstimate(props) {
           <Input placeholder="First Name" />
         </Item>
         <Item
+        label="Last Name"
           name="LastName"
           rules={[
             {
@@ -92,6 +145,7 @@ export default function NewEstimate(props) {
           <Input placeholder="Last Name" />
         </Item>
         <Item
+        label="Billing Address"
           name="BillingAddress"
           rules={[
             {
@@ -103,85 +157,7 @@ export default function NewEstimate(props) {
           <Input placeholder="Billing Address" />
         </Item>
         <Item
-          name="City"
-          rules={[
-            {
-              required: true,
-              message: "Cannot be Empty",
-            },
-          ]}
-        >
-          <Input placeholder="city" />
-        </Item>
-        <Item
-          name="PostalCode"
-          rules={[
-            {
-              required: true,
-              message: "Cannot be Empty",
-            },
-          ]}
-        >
-          <Input placeholder="PostalCode" />
-        </Item>
-        <Item
-          name="Phone"
-          rules={[
-            {
-              required: true,
-              message: "Cannot be Empty",
-            },
-          ]}
-        >
-          <Input placeholder="Phone Number" />
-        </Item>
-        <Item
-          name="Email"
-          rules={[
-            {
-              required: true,
-              message: "Cannot be Empty",
-            },
-          ]}
-        >
-          <Input placeholder="Email" />
-        </Item>
-        <Item
-          name="Region"
-          label="region"
-          rules={[
-            {
-              required: true,
-              message: "Cannot be Empty",
-            },
-          ]}
-        >
-          <Select>{options}</Select>
-        </Item>
-        <Item
-          name="RegionID"
-          label="regionID"
-          rules={[
-            {
-              required: true,
-              message: "Cannot be Empty",
-            },
-          ]}
-        >
-          <Select>{options3}</Select>
-        </Item>
-        <Item
-          name="SiteAddress"
-          rules={[
-            {
-              required: true,
-              message: "Cannot be Empty",
-            },
-          ]}
-        >
-          <Input placeholder="Site Address" />
-        </Item>
-        <Item
+          label="City"
           name="City"
           rules={[
             {
@@ -193,7 +169,8 @@ export default function NewEstimate(props) {
           <Input placeholder="City" />
         </Item>
         <Item
-          name="PostalCode1"
+          label="Province"
+          name="Prov"
           rules={[
             {
               required: true,
@@ -201,11 +178,11 @@ export default function NewEstimate(props) {
             },
           ]}
         >
-          <Input placeholder="PostalCode" />
+          <Input placeholder="Province" />
         </Item>
         <Item
-          name="startDate"
-          label="start of time"
+        label= "Postal Code"
+          name="PostalCode"
           rules={[
             {
               required: true,
@@ -213,11 +190,11 @@ export default function NewEstimate(props) {
             },
           ]}
         >
-          <DatePicker onChange={handleDate} className="datepicker" />
+          <Input placeholder="Postal Code" />
         </Item>
         <Item
-          name="endDate"
-          label="end of time"
+        label="Phone"
+          name="Phone"
           rules={[
             {
               required: true,
@@ -225,7 +202,69 @@ export default function NewEstimate(props) {
             },
           ]}
         >
-          <DatePicker onChange={handleDate} className="datepicker" />
+          <Input placeholder="Phone Number" />
+        </Item>
+        <Item
+        label="Email Address"
+          name="Email"
+        >
+          <Input placeholder="Email" />
+        </Item>
+        <Item
+          name="Region"
+          label="Region"
+          rules={[
+            {
+              required: true,
+              message: "Cannot be Empty",
+            },
+          ]}
+        >
+          <Select>{options}</Select>
+        </Item>
+        <i>Only fill in site address information if different than billing address</i>< br/>
+        <i>---</i>
+        <Item
+        label="Site Address"
+          name="siteAddress"
+        >
+          <Input placeholder="Address" />
+        </Item>
+        <Item
+        label="Site City"
+          name="siteCity"
+        >
+          <Input placeholder="City" />
+        </Item>
+        <Item
+          label="Site Province"
+          name="siteProv">
+            <Input placeholder="Province" />
+          </Item>
+        <Item
+        label="Postal Code"
+          name="sitePostal"
+        >
+          <Input placeholder="Postal Code" />
+        </Item>
+        <Item
+          name="siteRegion"
+          label="Site Region"
+        >
+          <Select>{options}</Select>
+        </Item>
+        <i>---</i>
+        <Item
+          name="selectedDate"
+          label="Time"
+          rules={[
+            {
+              required: true,
+              message: "Cannot be Empty",
+            },
+          ]}
+        >
+          <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" className="datepicker" />
         </Item>
         <Item
           name="JobType"
@@ -240,6 +279,7 @@ export default function NewEstimate(props) {
           <Select>{options1}</Select>
         </Item>
         <Item
+        label="Information"
           name="EstimateInfo"
           rules={[
             {
@@ -248,7 +288,7 @@ export default function NewEstimate(props) {
             },
           ]}
         >
-          <Input placeholder="EstimateInfo" />
+          <TextArea rows={4} placeholder="Estimate Information" />
         </Item>
         <Item
           name="salesman"
@@ -270,10 +310,12 @@ export default function NewEstimate(props) {
             size="large"
             block
           >
-            Add
+            Create Estimate
           </Button>
         </Item>
       </Form>
+      </Card>
     </div>
   );
+}
 }
