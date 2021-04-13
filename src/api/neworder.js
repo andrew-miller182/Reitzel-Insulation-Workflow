@@ -1,5 +1,6 @@
 import ajax from "./base";
 import base from "./base";
+const {format} = require('date-fns-tz');
 
 export async function addOrder(order) {
   var tableName = "customers";
@@ -19,7 +20,7 @@ export async function addOrder(order) {
 
 export async function addEstimate(id, address, value) {
   var tableName = "estimates";
-  var values = `${null},'${id}','${address}','${value.UserID}','${value.JobType}','${new Date()}','${value.estimateInfo}','${value.Region}','${value.startDate}','${value.endDate}'`;
+  var values = `${null},'${id}','${address}','${value.UserID}','${value.JobType}','${format(new Date(),"yyyy-MM-dd'T'HH:mm:ss.SSSxxx")}','${value.estimateInfo}','${value.Region}','${value.startDate}','${value.endDate}'`;
 
   var estimate = await ajax("/insertValues", { tableName, values }, "post");
   if (estimate !== []) return estimate;

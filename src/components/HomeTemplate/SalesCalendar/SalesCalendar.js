@@ -7,8 +7,10 @@ import SalesTemplate from './SalesTemplate.js'
 import SalesTooltip from './salesTooltip.js';
 import {getEstimates, deleteEstimate, getUsers, updateEstimate, getRegionAPI} from '../../../api/calendar';
 import CustomStore from 'devextreme/data/custom_store';
+import { Modal, Button, Space } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-
+const { confirm } = Modal;
 const { zonedTimeToUtc, utcToZonedTime, format } = require('date-fns-tz')
 
 const dataSource = new CustomStore({
@@ -21,7 +23,7 @@ const dataSource = new CustomStore({
       AddressID : item.AddressID,
       UserID : item.UserID,
       CreationDate : item.CreationDate,
-      EstimateInfo : item.EstimateInfo,
+      text : item.EstimateInfo,
       RegionID : item.RegionID,
       startDate : timeFormat(item.startDate),
       endDate : timeFormat(item.endDate)
@@ -77,10 +79,12 @@ const renderResourceCell = (model) => {
   );
 }
 
-//const onAppointmentDeleting = (e) => {
-//  window.confirm("Are you sure you wish to delete this appointment?") &&
-//        this.dataSource.remove(e)
-//}
+const onAppointmentDeleting = (e) => {
+  console.log(e);
+  var cancel = true;
+  e.cancel = cancel;
+  var r = confirm({title:"Do you want to delete this appointment?", onOk(){dataSource.remove(e.appointmentData.EstimateID) }, onCancel(){cancel = true}});
+}
 
 class SalesCalendar extends React.Component {
   constructor(props) {
@@ -166,8 +170,8 @@ class SalesCalendar extends React.Component {
         startDayHour={0}
         endDayHour={24}
         appointmentComponent={SalesTemplate}
-        appointmentTooltipComponent={SalesTooltip}
-        //onAppointmentDeleting={onAppointmentDeleting}
+        //appointmentTooltipComponent={SalesTooltip}
+        onAppointmentDeleting={onAppointmentDeleting}
         onAppointmentFormOpening={this.onAppointmentForm}
         >
         <Resource
