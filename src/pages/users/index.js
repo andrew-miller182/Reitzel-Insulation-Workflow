@@ -39,7 +39,7 @@ export default function Users() {
   );
 
   const options = datas.role.map((item) => (
-    <Option key={item.id}>{item.rolename}</Option>
+    <Option key={item.rolename}>{item.rolename}</Option>
   ));
 
   //for table coloums
@@ -222,7 +222,7 @@ export default function Users() {
                       return Promise.resolve();
                     }
                     return Promise.reject(
-                      "the two password that you entered do not match"
+                      "the two passwords that you entered do not match"
                     );
                   },
                 }),
