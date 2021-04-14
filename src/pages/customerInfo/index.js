@@ -1,7 +1,7 @@
 import React, {useEffect, setState, useState} from 'react';
 import { Card, Table, Button, Modal, Form, Input, message, Select, Space } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import {getRegion, updateCustomer, getRegionAPI, getCustomer, getCustomerAddresses, deleteCustomer} from '../../api/customer';
+import {getRegion, updateCustomer, getRegionAPI, getCustomer, getCustomerAddresses, deleteCustomer, addAddress} from '../../api/customer';
 import { Redirect, useRouteMatch, useHistory } from "react-router-dom";
 import { withRouter } from "react-router";
 import { PropertiesPanel } from 'devextreme-react/diagram';
@@ -13,10 +13,13 @@ export function CustomerInfo() {
 
   let match = useRouteMatch('/customerinfo/:customer').params.customer;
   const [showForm, setShowForm] = useState(false);
+  const [showAddress, setShowAddress] = useState(false);
+  const [formAddress] = Form.useForm();
   const [form1] = Form.useForm();
   const [regions, setRegions] = useState([]);
   const [customerInfo, setcustomerinfo] = useState([]);
   const [addressList, setAddressList] = useState([]);
+
   const options = regions.map((item) => (
     <Option key={item.id}>{item.name}</Option>
   ));
@@ -137,6 +140,26 @@ export function CustomerInfo() {
         });
         
       }
+      const handleNewAddress = async () =>{
+        const validResult = await formAddress.validateFields();
+        if (validResult.errorFields && validResult.errorFields.length > 0) return;
+        const value = formAddress.getFieldsValue();
+        const info = {
+          BillingAddress: value.address,
+          PostalCode: value.postalCode,
+          City: value.city,
+          Prov: value.prov,
+          Region: value.region
+        }
+        let id = customerInfo.id;
+        var result = await addAddress(id, info);
+        console.log(result);
+        if (result.status == 200){
+          message.success("added new address");
+        }
+        setShowAddress(false);
+
+      }
     const columns =[
       {
         title:"Address",
@@ -205,7 +228,15 @@ export function CustomerInfo() {
         pagination={{ pageSize: 10 }}>
 
           </Table>
-        <Modal
+          <Button
+          type="primary"
+          onClick={() => {
+            setShowAddress(true);
+            formAddress.resetFields();
+          }}
+          >New Address</Button>
+
+          <Modal
           visible={showForm}
           title="Update Customer"
           onOk={handleUpdate}
@@ -304,6 +335,79 @@ export function CustomerInfo() {
             >
               <Select>{options}</Select>
             </Item>
+          </Form>
+        </Modal>
+        <Modal
+          visible={showAddress}
+          title="New Address"
+          onOk={handleNewAddress}
+          onCancel={() => setShowAddress(false)}
+          >
+          <Form
+              form={formAddress}
+              labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}
+              >
+              <Item 
+              label="Address"
+              name="address"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+              >
+                <Input />
+              </Item>
+              <Item 
+              label="Postal Code"
+              name="postalCode"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+              >
+                <Input />
+              </Item>
+              <Item 
+              label="City"
+              name="city"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+              >
+                <Input />
+              </Item>
+              <Item 
+              label="Province"
+              name="prov"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+              >
+                <Input />
+              </Item>
+              <Item 
+              label="Region"
+              name="region"
+              rules={[
+                {
+                  required: true,
+                  message: "Required",
+                },
+              ]}
+            >
+              <Select>{options}</Select>
+              </Item>
+
           </Form>
         </Modal>
         </Card>

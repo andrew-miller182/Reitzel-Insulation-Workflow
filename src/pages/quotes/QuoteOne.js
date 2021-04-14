@@ -8,7 +8,7 @@ import CustomSelect from "../../component/quotes/CustomSelect";
 import qData from './quoteData.js';
 
 import axios from "axios";
-import Header from './header';
+
 
 
 function QuoteOne(props) {
@@ -434,7 +434,7 @@ function QuoteOne(props) {
                         </tr>
                         <tr>
                             <td colSpan="2" style={{ textAlign : "left"}}> </td>
-                            <td> Overried : <input  className="ant-checkbox" name="manual" type="checkbox" defaultChecked={manualcalc} 
+                            <td> Override : <input  className="ant-checkbox" name="manual" type="checkbox" defaultChecked={manualcalc} 
                             onChange={(e) => { handleManualcalc(e)
                             }}
                             /></td>

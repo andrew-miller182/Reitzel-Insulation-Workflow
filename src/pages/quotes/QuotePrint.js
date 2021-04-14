@@ -8,6 +8,10 @@ import { useParams } from "react-router";
 import qData from "./quoteData.js";
 import Headerforquoto from "../headforquote";
 import Footerforquoto from "../footer";
+import { sendQuote } from "../../api/quotes";
+import { message } from "antd";
+
+
 function printQuote() {
   var content = document.getElementById("printContents");
   var pri = document.getElementById("ifmcontentstoprint").contentWindow;
@@ -16,6 +20,12 @@ function printQuote() {
   pri.document.close();
   pri.focus();
   pri.print();
+}
+
+function emailQuote(customer){
+  var content = document.getElementById("printContents");
+  var email = sendQuote(customer, content.innerHTML);
+  message.success("Email sent");
 }
 
 function QuotePrint(props) {
@@ -51,7 +61,6 @@ function QuotePrint(props) {
         style={{ width: "80%", margin: "auto" }}
       >
         <Headerforquoto />
-        <h2> {quoteData.name}</h2>
         <p>
           <strong>Attention TO:</strong> {quoteFormData.first_name}{" "}
           {quoteFormData.last_name}
@@ -127,9 +136,10 @@ function QuotePrint(props) {
           WSIB# {quoteFormData.wsib} &nbsp; Account: {quoteFormData.account}{" "}
           &nbsp; Firm # {quoteFormData.firm}
         </p>
+              <Footerforquoto />
       </div>
-      <Footerforquoto />
       <button onClick={printQuote}> Print this Quote</button>
+      <button onClick={() => emailQuote(quoteFormData.email)}> Send as Email</button> 
       <iframe
         id="ifmcontentstoprint"
         style={{ height: "0px", width: "0px", position: "absolute" }}

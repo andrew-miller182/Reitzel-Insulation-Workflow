@@ -104,3 +104,15 @@ export async function deleteCustomer(id) {
     return 0;
   }
 }
+
+export async function addAddress(id, value){
+  var tableName = "address";
+  var values = `${null},'${id}','${value.BillingAddress}','${value.PostalCode}','${value.City}','${value.Prov}','${value.Region}'`;
+
+  var address = await ajax("/insertValues", { tableName, values }, "post");
+  console.log("address", address);
+  if (address !== []) return address;
+  else {
+    return 0;
+  }
+}
