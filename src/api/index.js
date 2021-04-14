@@ -32,7 +32,6 @@ export async function getLogin(loginId, loginPwd) {
 //add user
 export async function addUser(user) {
   var tableName = "users";
-
   var values = `null,'${user.loginId}','${user.loginId}','${user.email}','${user.loginPwd}','${user.role}',"null"`;
 
   var users = await ajax("/insertValues", { tableName, values }, "post");

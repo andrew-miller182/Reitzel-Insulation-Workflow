@@ -154,54 +154,6 @@ export default function NewEstimate(props) {
               <Input placeholder="Last Name" />
             </Item>
             <Item
-              label="Billing Address"
-              name="BillingAddress"
-              rules={[
-                {
-                  required: true,
-                  message: "Cannot be Empty",
-                },
-              ]}
-            >
-              <Input placeholder="Billing Address" />
-            </Item>
-            <Item
-              label="City"
-              name="City"
-              rules={[
-                {
-                  required: true,
-                  message: "Cannot be Empty",
-                },
-              ]}
-            >
-              <Input placeholder="City" />
-            </Item>
-            <Item
-              label="Province"
-              name="Prov"
-              rules={[
-                {
-                  required: true,
-                  message: "Cannot be Empty",
-                },
-              ]}
-            >
-              <Input placeholder="Province" />
-            </Item>
-            <Item
-              label="Postal Code"
-              name="PostalCode"
-              rules={[
-                {
-                  required: true,
-                  message: "Cannot be Empty",
-                },
-              ]}
-            >
-              <Input placeholder="Postal Code" />
-            </Item>
-            <Item
               label="Phone"
               name="Phone"
               rules={[
@@ -216,37 +168,81 @@ export default function NewEstimate(props) {
             <Item label="Email Address" name="Email">
               <Input placeholder="Email" />
             </Item>
+            <Item label="Site Address" name="siteAddress"
+            rules={[
+              {
+                required: true,
+                message: "Cannot be Empty",
+              },
+            ]}>
+              <Input placeholder="Address" />
+            </Item>
+            <Item label="Site City" name="siteCity"
+            rules={[
+              {
+                required: true,
+                message: "Cannot be Empty",
+              },
+            ]}>
+              <Input placeholder="City" />
+            </Item>
+            <Item label="Site Province" name="siteProv"
+            rules={[
+              {
+                required: true,
+                message: "Cannot be Empty",
+              },
+            ]}>
+              <Input placeholder="Province" />
+            </Item>
+            <Item label="Postal Code" name="sitePostal"
+            rules={[
+              {
+                required: true,
+                message: "Cannot be Empty",
+              },
+            ]}>
+              <Input placeholder="Postal Code" />
+            </Item>
+            <Item name="siteRegion" label="Site Region"
+            rules={[
+              {
+                required: true,
+                message: "Cannot be Empty",
+              },
+            ]}>
+              <Select>{options}</Select>
+            </Item>
+            <i>optional billing address</i><br/>
+            <i>---</i>
+            <Item
+              label="Billing Address"
+              name="BillingAddress" 
+            >
+            <Input placeholder="Billing Address" />
+            </Item>
+            <Item
+              label="City"
+              name="City"
+            >
+              <Input placeholder="City" />
+            </Item>
+            <Item
+              label="Province"
+              name="Prov"
+            >
+              <Input placeholder="Province" />
+            </Item>
+            <Item
+              label="Postal Code"
+              name="PostalCode"
+            >
+              <Input placeholder="Postal Code" />
+            </Item>
             <Item
               name="Region"
               label="Region"
-              rules={[
-                {
-                  required: true,
-                  message: "Cannot be Empty",
-                },
-              ]}
             >
-              <Select>{options}</Select>
-            </Item>
-            <i>
-              Only fill in site address information if different than billing
-              address
-            </i>
-            <br />
-            <i>---</i>
-            <Item label="Site Address" name="siteAddress">
-              <Input placeholder="Address" />
-            </Item>
-            <Item label="Site City" name="siteCity">
-              <Input placeholder="City" />
-            </Item>
-            <Item label="Site Province" name="siteProv">
-              <Input placeholder="Province" />
-            </Item>
-            <Item label="Postal Code" name="sitePostal">
-              <Input placeholder="Postal Code" />
-            </Item>
-            <Item name="siteRegion" label="Site Region">
               <Select>{options}</Select>
             </Item>
             <i>---</i>
@@ -319,3 +315,58 @@ export default function NewEstimate(props) {
     );
   }
 }
+
+
+
+/*
+<Input placeholder="Billing Address" />
+            </Item>
+            <Item
+              label="City"
+              name="City"
+              rules={[
+                {
+                  required: true,
+                  message: "Cannot be Empty",
+                },
+              ]}
+            >
+              <Input placeholder="City" />
+            </Item>
+            <Item
+              label="Province"
+              name="Prov"
+              rules={[
+                {
+                  required: true,
+                  message: "Cannot be Empty",
+                },
+              ]}
+            >
+              <Input placeholder="Province" />
+            </Item>
+            <Item
+              label="Postal Code"
+              name="PostalCode"
+              rules={[
+                {
+                  required: true,
+                  message: "Cannot be Empty",
+                },
+              ]}
+            >
+              <Input placeholder="Postal Code" />
+            </Item>
+            <Item
+              name="Region"
+              label="Region"
+              rules={[
+                {
+                  required: true,
+                  message: "Cannot be Empty",
+                },
+              ]}
+            >
+              <Select>{options}</Select>
+            </Item>
+            */

@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import {useSelector, useDispatch} from "react-redux";
 import CustomSelect from "../../component/quotes/CustomSelect";
 import qData from './quoteData.js';
+import {getCustomers} from '../../api/customer';
 
 import axios from "axios";
 
@@ -36,12 +37,10 @@ function QuoteOne(props) {
     
     // const customers = qData.customer_data;
     
-    useEffect(() => {
-        qData.getGustomers().then((resp) =>{
-            var cust = [];
-            for (let i = 0; i < resp.data.length; i++) {
-                const c = resp.data[i];
-                cust.push({
+    useEffect(async () => {
+        let result = await getCustomers();
+            let cust = result.data.map((c) => (
+                    {
                     id : c.CustomerID,
                     name : c.FirstName + " " + c.LastName,
                     first_name : c.FirstName,
@@ -52,15 +51,11 @@ function QuoteOne(props) {
                     city : c.City,
                     postCode : c.PostalCode,
                     region : c.Region,
-                });
-            }
-            setCustomers(cust);    
-        })
-        .finally(() => {
-            setQuoteData(selectedQuote);
-            setLoading(false);
-        })        
-    },[selectedQuote]);
+                }
+            ));
+            setCustomers(cust);
+            setLoading(false);    
+        },[selectedQuote]);
 
     const dispatch = useDispatch();
     const {value: firstName, bind: bindFirstName, reset: resetFirstName,assignValue: assignFirstName} = useInput();

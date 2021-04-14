@@ -90,7 +90,7 @@ class SalesCalendar extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      groupByDate:true,
+      groupByDate:false,
       cancel:true,
       userList:"",
       regionList:"",
@@ -167,8 +167,8 @@ class SalesCalendar extends React.Component {
         defaultCurrentView="workWeek"
         defaultCurrentDate={date}
         height={800}
-        startDayHour={0}
-        endDayHour={24}
+        startDayHour={6}
+        endDayHour={21}
         appointmentComponent={SalesTemplate}
         //appointmentTooltipComponent={SalesTooltip}
         onAppointmentDeleting={onAppointmentDeleting}
