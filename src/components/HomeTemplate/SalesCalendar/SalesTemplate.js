@@ -9,7 +9,7 @@ export default function SalesTemplate(model) {
   return (
     <div>
       <div>
-        Job info: {appointmentData.text}</div>
+        {appointmentData.text}</div>
     </div>
   );
 }

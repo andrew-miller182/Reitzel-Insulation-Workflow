@@ -1,6 +1,7 @@
 import React from "react";
-import logo from "../../assets/logo.png";
 import "./index.css";
+const logo=  "https://i.ibb.co/FVFjQwV/logo.png";
+
 export default function HeadForQuote() {
   return (
     <div className="headerforquoto">

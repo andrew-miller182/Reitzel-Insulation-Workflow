@@ -30,6 +30,7 @@ export default function NewCustomer(props) {
     var customerID = await getLatestCustomer();
     var latestCustomer = customerID.data[0].CustomerID;
     var newAddress = await addAddress(latestCustomer, values);
+    console.log("new address",newAddress);
     if (newAddress.status == 200) {
       message.success("Added successfully");
       props.history.push("/customers");

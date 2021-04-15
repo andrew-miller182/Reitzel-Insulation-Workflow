@@ -4,11 +4,7 @@ const {format} = require('date-fns-tz');
 
 export async function addOrder(order) {
   var tableName = "customers";
-  var values = `${null},'${order.FirstName}','${order.LastName}','${
-    order.Phone
-  }','${order.Email}','${order.BillingAddress}','${order.City}','${
-    order.PostalCode
-  }',${order.Region}`;
+  var values = `${null},'${order.FirstName}','${order.LastName}','${order.Phone}','${order.Email}','${order.BillingAddress}','${order.City}','${order.PostalCode}','${order.Region}'`;
 
   var orders = await ajax("/insertValues", { tableName, values }, "post");
   console.log("cusotmers", orders);

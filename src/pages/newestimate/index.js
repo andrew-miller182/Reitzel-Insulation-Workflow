@@ -74,11 +74,12 @@ export default function NewEstimate(props) {
       City: values.siteCity,
       Prov: values.siteProv,
       PostalCode: values.sitePostal,
+      Region: values.siteRegion
     };
     var estimate = {
       UserID: values.salesman,
       JobType: values.JobType,
-      Region: values.Region,
+      Region: values.siteRegion,
       startDate: format(
         values.selectedDate[0]._d,
         "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"
@@ -99,7 +100,9 @@ export default function NewEstimate(props) {
     var getCustomerID = await getLatestCustomer();
     var latestCustomer = getCustomerID.data[0].CustomerID;
     console.log("customerID", getCustomerID);
-    var newAddress = await addAddress(latestCustomer, customer);
+    if(customer.BillingAddress !== undefined){
+          var newAddress = await addAddress(latestCustomer, customer);
+    }
     if (siteAddress.BillingAddress !== undefined) {
       var siteAddressSent = await addAddress(latestCustomer, siteAddress);
     }

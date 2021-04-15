@@ -1,9 +1,12 @@
 import { Center } from "devextreme-react/map";
 import React from "react";
 import "./index.css";
-import visa from "../../assets/visa.png";
-import master from "../../assets/master.png";
-import express from "../../assets/express.png";
+
+const visa = "https://i.ibb.co/XXWJ82B/visa.png";
+const master = "https://i.ibb.co/DgctQDJ/master.png";
+const express = "https://i.ibb.co/HhyY0k3/express.png";
+
+
 export default function Footerforquote() {
   return (
     <div className="footerforqueto">
