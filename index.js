@@ -1,4 +1,5 @@
 const express = require('express')
+var cors = require('cors');
 const bodyParser = require('body-parser')
 const { encrypt, decrypt } = require('./Encryption Api/crypto')
 let myApi = require('./Database API//apiAsync')
@@ -10,18 +11,14 @@ const PORT = process.env.PORT || 5001;
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+app.use(cors());
 
 
-app.get('/', async (req, res, next) => {
+app.get('/', async (req, res) => {
   res.send('Reitzel Server Running');
 })
 
-app.post('/fetchValues', async (req, res, next) => {
+app.post('/fetchValues', async (req, res) => {
   //let { tableName, columns, condition } = req.body
   let tableName = req.body.tableName
   let columns = req.body.columns || '*'
