@@ -14,11 +14,11 @@ app.use(express.json())
 app.use(cors());
 
 
-app.get('/', async (req, res) => {
+app.get('/', async (req, res, next) => {
   res.send('Reitzel Server Running');
 })
 
-app.post('/fetchValues', async (req, res) => {
+app.post('/fetchValues', async (req, res, next) => {
   //let { tableName, columns, condition } = req.body
   let tableName = req.body.tableName
   let columns = req.body.columns || '*'
@@ -27,7 +27,7 @@ app.post('/fetchValues', async (req, res) => {
   res.send(output)
 })
 
-app.post('/insertValues', async (req, res) => {
+app.post('/insertValues', async (req, res, next) => {
   // let { tableName, values } = req.body
   let tableName = req.body.tableName
   let values = req.body.values
@@ -35,7 +35,7 @@ app.post('/insertValues', async (req, res) => {
   res.send(output)
 })
 
-app.post('/updateValues', async (req, res) => {
+app.post('/updateValues', async (req, res, next) => {
   // let { tableName, columnsAndValues, condition } = req.body
   let tableName = req.body.tableName
   let columnsAndValues = req.body.columnsAndValues
@@ -44,7 +44,7 @@ app.post('/updateValues', async (req, res) => {
   res.send(output)
 })
 
-app.post('/deleteValues', async (req, res) => {
+app.post('/deleteValues', async (req, res, next) => {
   // let { tableName, condition } = req.body
   let tableName = req.body.tableName
   let condition = req.body.condition || 'true'
@@ -52,13 +52,13 @@ app.post('/deleteValues', async (req, res) => {
   res.send(output)
 })
 
-app.post('/processCustomQuery', async (req, res) => {
+app.post('/processCustomQuery', async (req, res, next) => {
   let { sql } = req.body
   let output = await myApi.processCustomQuery(sql)
   res.send(output)
 })
 
-app.post('/sendEmailText', async (req, res) => {
+app.post('/sendEmailText', async (req, res, next) => {
   let { to, subject, text } = req.body
   await myEmailApi.sendEmailText(
     (status, info) => {
@@ -74,7 +74,7 @@ app.post('/sendEmailText', async (req, res) => {
   )
 })
 
-app.post('/sendEmailHtml', async (req, res) => {
+app.post('/sendEmailHtml', async (req, res, next) => {
   let { to, subject, html } = req.body
   await myEmailApi.sendEmailHtml(
     (status, info) => {
@@ -90,12 +90,12 @@ app.post('/sendEmailHtml', async (req, res) => {
   )
 })
 
-app.post('/encrypt', async (req, res) => {
+app.post('/encrypt', async (req, res, next) => {
   let { data } = req.body
   res.send(encrypt(data))
 })
 
-app.post('/decrypt', async (req, res) => {
+app.post('/decrypt', async (req, res, next) => {
   let { data } = req.body
   res.send(decrypt(data))
 })
