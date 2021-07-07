@@ -5,8 +5,9 @@ let myApi = require('./Database API//apiAsync')
 let myEmailApi = require('./Email API/emailApi')
 const app = express()
 const PORT = process.env.PORT || 5001;
+const cors = cors();
 
-
+app.use(cors);
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(function(req, res, next) {
@@ -15,7 +16,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.options('*', cors());
+app.options('*', cors);
 
 app.get('/', async (req, res) => {
   res.send('Reitzel Server Running');
