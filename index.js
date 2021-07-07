@@ -4,7 +4,7 @@ const { encrypt, decrypt } = require('./Encryption Api/crypto')
 let myApi = require('./Database API//apiAsync')
 let myEmailApi = require('./Email API/emailApi')
 const app = express()
-const port = 5001
+const PORT = process.env.PORT || 5001;
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -91,6 +91,6 @@ app.post('/decrypt', async (req, res) => {
   res.send(decrypt(data))
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+app.listen(PORT, () => {
+  console.log(`Example app listening at PORT ${PORT}`)
 })
