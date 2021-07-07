@@ -96,5 +96,5 @@ app.post('/decrypt', async (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Example app listening at PORT ${PORT}`)
+  console.log(`REITZEL Insulation server running on PORT ${PORT}`)
 })
