@@ -11,14 +11,13 @@ const PORT = process.env.PORT || 5001;
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(cors());
 
 
-app.get('/', async (req, res, next) => {
+app.get('/', cors(), async (req, res, next) => {
   res.send('Reitzel Server Running');
 })
 
-app.post('/fetchValues', async (req, res, next) => {
+app.post('/fetchValues', cors(), async (req, res, next) => {
   //let { tableName, columns, condition } = req.body
   let tableName = req.body.tableName
   let columns = req.body.columns || '*'
