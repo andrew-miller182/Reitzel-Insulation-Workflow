@@ -2,10 +2,10 @@ let mysql = require('mysql2/promise')
 
 async function getConnection() {
   var conn = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'reitzel_insulation',
+    host: 'us-cdbr-east-04.cleardb.com',
+    user: 'b1604294bb6204',
+    password: '452bd316 ',
+    database: 'heroku_89c73764e572753',
   })
 
   return conn
