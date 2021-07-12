@@ -27,7 +27,7 @@ app.post('/fetchValues', cors(), async (req, res, next) => {
   let condition = req.body.condition || 'true'
   let output = await myApi.fetchValues(tableName, columns, condition)
   
-  res.send(req.body);
+  res.send(output);
 })
 
 app.post('/insertValues', async (req, res, next) => {
