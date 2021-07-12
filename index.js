@@ -21,11 +21,13 @@ app.options('/fetchValues', cors());
 
 app.post('/fetchValues', cors(), async (req, res, next) => {
   //let { tableName, columns, condition } = req.body
+  /*
   let tableName = req.body.tableName
   let columns = req.body.columns || '*'
   let condition = req.body.condition || 'true'
   let output = await myApi.fetchValues(tableName, columns, condition)
-  res.send(output)
+  */
+  res.send(req.body);
 })
 
 app.post('/insertValues', async (req, res, next) => {
