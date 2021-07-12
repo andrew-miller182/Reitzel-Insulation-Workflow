@@ -4,7 +4,7 @@ async function getConnection() {
   var conn = await mysql.createConnection({
     host: 'us-cdbr-east-04.cleardb.com',
     user: 'b1604294bb6204',
-    password: '452bd316 ',
+    password: '452bd316',
     database: 'heroku_89c73764e572753',
   })
 
