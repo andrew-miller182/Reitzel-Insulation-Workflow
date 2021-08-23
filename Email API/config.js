@@ -1,7 +1,7 @@
 let mailService = 'gmail'
-let mailUser = 'noreply.reitzelinsulation@gmail.com'
+let mailUser = 'no-reply@reitzel.ca'
 let mailPassword =
-  'e4cbb2c33bf01754e6eed794665f5a9c/*/*=:-9*a63b99c77fcbb808fa6a80c6'
+  "719850e308618017448f09a1d81c1534/*/*=:-9*88556202928914fe32"
 
 exports.mailService = mailService
 exports.mailUser = mailUser
