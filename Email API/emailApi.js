@@ -55,6 +55,7 @@ let sendEmailHtml = async (callback, _to, _subject, _html, _file) => {
     html: _html,
     attachments: [
       {
+        name:"Customer_Info_Sheet.pdf",
         path:_file
       }
     ]

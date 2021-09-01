@@ -78,7 +78,7 @@ app.post('/sendEmailText', async (req, res, next) => {
 })
 
 app.post('/sendEmailHtml', async (req, res, next) => {
-  let { to, subject, html } = req.body
+  let { to, subject, html, file } = req.body
   await myEmailApi.sendEmailHtml(
     (status, info) => {
       if (status === true) {
@@ -90,6 +90,7 @@ app.post('/sendEmailHtml', async (req, res, next) => {
     to,
     subject,
     html,
+    file
   )
 })
 
