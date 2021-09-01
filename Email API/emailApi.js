@@ -37,7 +37,7 @@ let sendEmailText = async (callback, _to, _subject, _text) => {
   })
 }
 
-let sendEmailHtml = async (callback, _to, _subject, _html, attachName, attachFile) => {
+let sendEmailHtml = async (callback, _to, _subject, _html) => {
   let status = false
   let transporter = nodemailer.createTransport({
     service: mailService,
@@ -55,8 +55,7 @@ let sendEmailHtml = async (callback, _to, _subject, _html, attachName, attachFil
     html: _html,
     attachments: [
       {
-        filename: attachName,
-        path: attachFile
+        path:'assets\Customer Info Sheet _ Reitzel Insulation.pdf'
       }
     ]
   }
