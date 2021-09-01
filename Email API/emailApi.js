@@ -55,7 +55,7 @@ let sendEmailHtml = async (callback, _to, _subject, _html) => {
     html: _html,
     attachments: [
       {
-        path:'https://github.com/andrew-miller-dev/Reitzel-Insulation-Desktop/blob/main/src/assets/Customer%20Info%20Sheet%20_%20Reitzel%20Insulation.pdf'
+        path:'https://github.com/andrew-miller-dev/Reitzel-Insulation-Desktop/raw/main/src/assets/Customer%20Info%20Sheet%20_%20Reitzel%20Insulation.pdf'
       }
     ]
   }
