@@ -37,7 +37,7 @@ let sendEmailText = async (callback, _to, _subject, _text) => {
   })
 }
 
-let sendEmailHtml = async (callback, _to, _subject, _html) => {
+let sendEmailHtml = async (callback, _to, _subject, _html, _attachment) => {
   let status = false
   let transporter = nodemailer.createTransport({
     service: mailService,
@@ -53,6 +53,12 @@ let sendEmailHtml = async (callback, _to, _subject, _html) => {
     to: _to,
     subject: _subject,
     html: _html,
+    attachments: [
+      {
+        filename: _attachment.name,
+        content: _attachment.file
+      }
+    ]
   }
   //----------------------------Original Code
 
