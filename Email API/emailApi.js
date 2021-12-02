@@ -53,12 +53,17 @@ let sendEmailHtml = async (callback, _to, _subject, _html, _file) => {
     to: _to,
     subject: _subject,
     html: _html,
-    attachments: [
+    attachments:() => {
+      if (_file) {
+      return [
       {
-        name:"Customer_Info_Sheet.pdf",
+        name:"Reitzel_Insulation.pdf",
         path:_file
       }
-    ]
+    ];
+    }
+    else return null;
+    } 
   }
   //----------------------------Original Code
 
