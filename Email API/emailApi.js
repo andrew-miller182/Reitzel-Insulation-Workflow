@@ -54,7 +54,7 @@ let sendEmailHtml = async (callback, _to, _subject, _html, _file) => {
     subject: _subject,
     html: _html,
     attachments:() => {
-      if (_file) {
+      if (_file !== undefined) {
       return [
       {
         name:"Reitzel_Insulation.pdf",
