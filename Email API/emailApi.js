@@ -62,7 +62,7 @@ let sendEmailHtml = async (callback, _to, _subject, _html, _file) => {
       }
     ];
     }
-    else return null;
+    else return [];
     } 
   }
   //----------------------------Original Code
