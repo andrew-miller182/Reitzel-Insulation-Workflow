@@ -1,10 +1,26 @@
-let nodemailer = require('nodemailer')
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+
 let config = require('./config')
 const { encrypt, decrypt } = require('../Encryption Api/crypto')
 let mailService = config.mailService
 let mailUser = config.mailUser
 let mailPassword = decrypt(config.mailPassword)
+const mailToken = require('./newToken.json');
+const mailInfo = require('./client_secret_238053521559-rhi5n2kmf4vko9q23sjj55tnu3s7ht5t.apps.googleusercontent.com.json');
 
+const oauth2Client = new OAuth2(
+  mailInfo.web.client_id,
+  mailInfo.web.client_secret,
+  "https://developers.google.com/oauthplayground" // Redirect URL
+);
+
+oauth2Client.setCredentials({
+  refresh_token:mailToken.refresh_token
+});
+
+const accessToken = oauth2Client.getAccessToken();
 //----------------------------------------------------Testing Starts
 // const ajax = require('../Testing/sampleBase')
 // const CircularJSON = require('circular-json')
@@ -40,10 +56,21 @@ let sendEmailText = async (callback, _to, _subject, _text) => {
 let sendEmailHtml = async (callback, _to, _subject, _html, _file) => {
   let status = false
   let transporter = nodemailer.createTransport({
+    /*
+    name:"mail.google.com",
+    host:"https://mail.google.com/",
+    */
+    tls: {
+      rejectUnauthorized: false
+      },      
     service: mailService,
     auth: {
+      type:"OAuth2",
       user: mailUser,
-      pass: mailPassword,
+      clientId:mailInfo.web.client_id,
+      clientSecret:mailInfo.web.client_secret,
+      refreshToken:mailToken.refresh_token,
+      accessToken:accessToken
     },
   })
 
@@ -53,17 +80,6 @@ let sendEmailHtml = async (callback, _to, _subject, _html, _file) => {
     to: _to,
     subject: _subject,
     html: _html,
-    attachments:() => {
-      if (_file !== undefined) {
-      return [
-      {
-        name:"Reitzel_Insulation.pdf",
-        path:_file
-      }
-    ];
-    }
-    else return [];
-    } 
   }
   //----------------------------Original Code
 
@@ -83,12 +99,15 @@ let sendEmailHtml = async (callback, _to, _subject, _html, _file) => {
   //----------------------------Testing Code
 
   transporter.sendMail(mailOptions, async function (error, info) {
+    console.log(info);
     if (error) {
       console.log(error)
     } else {
+      
       status = true
       callback(status, info)
     }
+    transporter.close();
   })
 }
 

@@ -1,0 +1,7 @@
+  {
+    "access_token": "ya29.A0ARrdaM8AU3iHLKnALpuLfn2xAZ1u6qSVbKLJxtB7yo6Mk8qXLJwXnKsdePQ8Y46l6cJzT6W49LF3OOIuGbc6DjANLy9aGtEFEAKyBd0kbsOPa73QF1vWxQCFTmT7_CqWLpm-GliB2hf0WqA80VXVQh7vd3q1", 
+    "scope": "https://mail.google.com/", 
+    "token_type": "Bearer", 
+    "expires_in": 3599, 
+    "refresh_token": "1//04fA8rbZgIAgBCgYIARAAGAQSNwF-L9Ir59Bljfl0cIJ8TqFpftoeKFR8vEZHmEVbMksC3K1u77yztbOBow5QBp5BJGtIL5nthq0"
+  }
