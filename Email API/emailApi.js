@@ -53,7 +53,7 @@ let sendEmailText = async (callback, _to, _subject, _text) => {
   })
 }
 
-let sendEmailHtml = async (callback, _to, _subject, _html, _file) => {
+let sendEmailHtml = async (callback, _to, _subject, _html) => {
   let status = false
   let transporter = nodemailer.createTransport({
     /*
@@ -111,5 +111,70 @@ let sendEmailHtml = async (callback, _to, _subject, _html, _file) => {
   })
 }
 
+let sendEmailAttach = async (callback, _to, _subject, _html, _file) => {
+  let status = false
+  let transporter = nodemailer.createTransport({
+    /*
+    name:"mail.google.com",
+    host:"https://mail.google.com/",
+    */
+    tls: {
+      rejectUnauthorized: false
+      },      
+    service: mailService,
+    auth: {
+      type:"OAuth2",
+      user: mailUser,
+      clientId:mailInfo.web.client_id,
+      clientSecret:mailInfo.web.client_secret,
+      refreshToken:mailToken.refresh_token,
+      accessToken:accessToken
+    },
+  })
+
+  //----------------------------Original Code
+  let mailOptions = {
+    from: mailUser,
+    to: _to,
+    subject: _subject,
+    html: _html,
+    attachments:[
+      {
+        filename:"Reitzel Attachment",
+        content:_file
+      }
+    ]
+  }
+  //----------------------------Original Code
+
+  //----------------------------Testing Code
+
+  // let htmlFile = await ajax.ajax('/', '', 'post')
+  // let stringHtmlFile = CircularJSON.stringify(htmlFile)
+  // console.log(stringHtmlFile)
+
+  // let mailOptions = {
+  //   from: mailUser,
+  //   to: _to,
+  //   subject: _subject,
+  //   html: CircularJSON.parse(stringHtmlFile),
+  //}
+
+  //----------------------------Testing Code
+
+  transporter.sendMail(mailOptions, async function (error, info) {
+    console.log(info);
+    if (error) {
+      console.log(error)
+    } else {
+      
+      status = true
+      callback(status, info)
+    }
+    transporter.close();
+  })
+}
+
+exports.sendEmailAttach = sendEmailAttach
 exports.sendEmailHtml = sendEmailHtml
 exports.sendEmailText = sendEmailText

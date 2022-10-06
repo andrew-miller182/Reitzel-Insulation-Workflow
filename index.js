@@ -89,9 +89,26 @@ app.post('/sendEmailHtml', async (req, res, next) => {
     },
     to,
     subject,
-    html,
-    file
+    html
   )
+})
+
+app.post('/sendEmailAttach', async (req, res, next) => {
+  let {to, subject, html, file} = req.body;
+  await myEmailApi.sendEmailAttach(
+    (status, info) => {
+      if(status === true) {
+        res.send('Email Sent: ' + JSON.stringify(info))
+      } else {
+        res.send('Error Occured: ' + JSON.stringify(info))
+      }
+      },
+      to,
+      subject,
+      html,
+      file
+  )
+
 })
 
 app.post('/encrypt', async (req, res, next) => {
