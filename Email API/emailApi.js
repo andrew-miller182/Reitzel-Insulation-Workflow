@@ -103,7 +103,6 @@ let sendEmailHtml = async (callback, _to, _subject, _html) => {
     if (error) {
       console.log(error)
     } else {
-      
       status = true
       callback(status, info)
     }
