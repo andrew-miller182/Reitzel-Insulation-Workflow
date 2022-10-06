@@ -139,8 +139,8 @@ let sendEmailAttach = async (callback, _to, _subject, _html, _file) => {
     html: _html,
     attachments:[
       {
-        filename:"Reitzel Attachment",
-        content:_file
+        path:_file,
+        contentType:'application/pdf'
       }
     ]
   }
@@ -166,7 +166,6 @@ let sendEmailAttach = async (callback, _to, _subject, _html, _file) => {
     if (error) {
       console.log(error)
     } else {
-      
       status = true
       callback(status, info)
     }
