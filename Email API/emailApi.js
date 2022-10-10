@@ -139,8 +139,7 @@ let sendEmailAttach = async (callback, _to, _subject, _html, _file) => {
     html: _html,
     attachments:[
       {
-        path:_file,
-        contentType:'application/pdf'
+        path:_file
       }
     ]
   }
