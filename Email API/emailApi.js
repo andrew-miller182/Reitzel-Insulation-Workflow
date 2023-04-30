@@ -172,6 +172,51 @@ let sendEmailAttach = async (callback, _to, _subject, _html, _file) => {
   })
 }
 
+let sendEmailPdf = async (callback, _to, _subject, _html) => {
+  let status = false
+  let transporter = nodemailer.createTransport({
+
+    tls: {
+      rejectUnauthorized: false
+      },      
+    service: mailService,
+    auth: {
+      type:"OAuth2",
+      user: mailUser,
+      clientId:mailInfo.web.client_id,
+      clientSecret:mailInfo.web.client_secret,
+      refreshToken:mailToken.refresh_token,
+      accessToken:accessToken
+    },
+  })
+
+  //----------------------------Original Code
+  let mailOptions = {
+    from: mailUser,
+    to: _to,
+    subject: _subject,
+    html: _html,
+    attachments:[
+      {
+        path:'./insulation.pdf',
+        file:'isulation.pdf'
+      }
+    ]
+  }
+
+  transporter.sendMail(mailOptions, async function (error, info) {
+    console.log(info);
+    if (error) {
+      console.log(error)
+    } else {
+      status = true
+      callback(status, info)
+    }
+    transporter.close();
+  })
+}
+
 exports.sendEmailAttach = sendEmailAttach
 exports.sendEmailHtml = sendEmailHtml
 exports.sendEmailText = sendEmailText
+exports.sendEmailPdf = sendEmailPdf

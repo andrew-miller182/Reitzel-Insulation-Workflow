@@ -111,6 +111,24 @@ app.post('/sendEmailAttach', async (req, res, next) => {
 
 })
 
+app.post('/sendEmailPdf', async (req, res, next) => {
+  let {to, subject, html, file} = req.body;
+  await myEmailApi.sendEmailPdf(
+    (status, info) => {
+      if(status === true) {
+        res.send('Email Sent: ' + JSON.stringify(info))
+      } else {
+        res.send('Error Occured: ' + JSON.stringify(info))
+      }
+      },
+      to,
+      subject,
+      html
+  )
+
+})
+
+
 app.post('/encrypt', async (req, res, next) => {
   let { data } = req.body
   res.send(encrypt(data))
